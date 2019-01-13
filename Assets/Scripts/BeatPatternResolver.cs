@@ -13,6 +13,6 @@ public class BeatPatternResolver
 
     public void run()
     {
-        B
+        
     }
 }

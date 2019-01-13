@@ -23,6 +23,11 @@ public static class BeatEngine {
         return (int)(ellapsedTime / _secondsPerBeat);
     }
 
+    public static float SecondsPerBeat()
+    {
+        return _secondsPerBeat;
+    }
+
     public static float RemainingTimeUntilNextBeatSec()
     {
         float ellapsedTime = Time.time - _startTimeSec;
@@ -31,8 +36,6 @@ public static class BeatEngine {
         {
             return _secondsPerBeat - ellapsedTime;
         }
-
-        Debug.Log(string.Format("ellapsed time is : {0}", ellapsedTime));
 
         return (_secondsPerBeat - (ellapsedTime % _secondsPerBeat));
     }

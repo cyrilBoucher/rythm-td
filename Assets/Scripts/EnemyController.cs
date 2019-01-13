@@ -17,10 +17,6 @@ public class EnemyController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        BeatEngine.StartBeat(120);
-        smoothTime = BeatEngine.RemainingTimeUntilNextBeatSec() / 2.0f;
-        print("smooth time is " + smoothTime);
-
         Vector3 newPosition = transform.position + new Vector3(1.0f, 0.0f, 0.0f);
         positions.AddLast(newPosition);
         newPosition += new Vector3(1.0f, 0.0f, 0.0f);
