@@ -19,4 +19,14 @@ public class BeatPattern : IEnumerable
             yield return input;
         }
     }
+
+    public void Add(Input input)
+    {
+        pattern.Add(input);
+    }
+
+    public Input At(int index)
+    {
+        return pattern[index];
+    }
 }
