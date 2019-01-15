@@ -23,6 +23,20 @@ public static class BeatEngine {
         return (int)(ellapsedTime / _secondsPerBeat);
     }
 
+    public static int ClosestBeatId()
+    {
+        float timeToClosestBeatSec = TimeToClosestBeatSec();
+
+        if (timeToClosestBeatSec >= 0)
+        {
+            return BeatId();
+        }
+        else
+        {
+            return BeatId() + 1;
+        }
+    }
+
     public static float SecondsPerBeat()
     {
         return _secondsPerBeat;
@@ -38,5 +52,22 @@ public static class BeatEngine {
         }
 
         return (_secondsPerBeat - (ellapsedTime % _secondsPerBeat));
+    }
+
+    // Returns the time to the closest beat.
+    // If the returned time is negative, the closest beat is next
+    // If the returned time is positive, the closest beat is passed
+    public static float TimeToClosestBeatSec()
+    {
+        float remaining = RemainingTimeUntilNextBeatSec();
+
+        if (remaining > (_secondsPerBeat / 2.0f))
+        {
+            return -remaining;
+        }
+        else
+        {
+            return _secondsPerBeat - remaining;
+        }
     }
 }
