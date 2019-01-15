@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class DefenseSpawner : MonoBehaviour {
 
-    private BeatPattern _beatPattern;
+    private BeatPattern _beatPattern = new BeatPattern();
     private int _patternIndex;
     private int _lastValidatedBeatId;
 
@@ -28,7 +28,7 @@ public class DefenseSpawner : MonoBehaviour {
 
         float timeToClosestBeatSec = BeatEngine.TimeToClosestBeatSec();
 
-        if (timeToClosestBeatSec > 0.2f &&
+        if (Math.Abs(timeToClosestBeatSec) > 0.2f &&
             expectedInput == BeatPattern.Input.SkipBeat)
         {
             return;

@@ -63,11 +63,11 @@ public static class BeatEngine {
 
         if (remaining > (_secondsPerBeat / 2.0f))
         {
-            return -remaining;
+            return _secondsPerBeat - remaining;
         }
         else
         {
-            return _secondsPerBeat - remaining;
+            return -remaining;
         }
     }
 }
