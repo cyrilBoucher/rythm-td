@@ -1,30 +1,60 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 public class DefenseSpawner : MonoBehaviour {
 
+    private BeatPattern _beatPattern;
+    private int _patternIndex;
+    private int _lastValidatedBeatId;
+
 	// Use this for initialization
 	void Start () {
-		
-	}
+        _patternIndex = 0;
+        _lastValidatedBeatId = -1;
+        _beatPattern.Add(BeatPattern.Input.OnBeat);
+        _beatPattern.Add(BeatPattern.Input.SkipBeat);
+        _beatPattern.Add(BeatPattern.Input.OnBeat);
+    }
 	
 	// Update is called once per frame
 	void Update () {
-		if (Input.GetMouseButtonDown(0))
+        BeatPattern.Input expectedInput = BeatPattern.Input.SkipBeat;
+        if (Input.GetMouseButtonDown(0))
         {
-            float remaining = BeatEngine.RemainingTimeUntilNextBeatSec();
-            float secondsPerBeat = BeatEngine.SecondsPerBeat();
-            float deltaAroundBeat = secondsPerBeat - remaining;
-            if (deltaAroundBeat <= 0.2f)
-            {
-                Debug.Log("Clicked on beat!");
-            }
-            else
-            {
-                float lateTime = deltaAroundBeat - 0.2f;
-                Debug.Log(string.Format("Missed! You were {0} seconds too late", lateTime));
-            }
+            expectedInput = BeatPattern.Input.OnBeat;
         }
+
+        float timeToClosestBeatSec = BeatEngine.TimeToClosestBeatSec();
+
+        if (timeToClosestBeatSec > 0.2f &&
+            expectedInput == BeatPattern.Input.SkipBeat)
+        {
+            return;
+        }
+
+        if (Math.Abs(timeToClosestBeatSec) <= 0.2f &&
+            _beatPattern.At(_patternIndex) == expectedInput &&
+            _lastValidatedBeatId != BeatEngine.ClosestBeatId())
+        {
+            Debug.Log(string.Format("Success on beat {0}!", BeatEngine.ClosestBeatId()));
+
+            _patternIndex++;
+            _lastValidatedBeatId = BeatEngine.ClosestBeatId();
+
+            return;
+        }
+
+        Debug.Log(string.Format("Failure on beat {0}!", BeatEngine.ClosestBeatId()));
+
+        _patternIndex = 0;
+        _lastValidatedBeatId = -1;
 	}
+
+    private void resetBeatPatternIndex()
+    {
+        Debug.Log("Resetting pattern");
+        _patternIndex = 0;
+    }
 }
