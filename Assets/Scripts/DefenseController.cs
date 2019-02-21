@@ -4,16 +4,16 @@ using UnityEngine;
 
 public class DefenseController : MonoBehaviour
 {
-    private CircleCollider2D _areaOfAttackCollider2D = new CircleCollider2D();
-    public float attackRadius;
+    private CircleCollider2D _areaOfAttackCollider2D;
+    public GameObject projectileGameObject;
     public float attackCooldownSec;
     private float _cooldownCounterSec;
 
     // Start is called before the first frame update
     void Start()
     {
-        _areaOfAttackCollider2D.isTrigger = true;
-        _areaOfAttackCollider2D.radius = attackRadius;
+        _areaOfAttackCollider2D = GetComponent<CircleCollider2D>();
+        _cooldownCounterSec = attackCooldownSec;
     }
 
     // Update is called once per frame
@@ -38,16 +38,35 @@ public class DefenseController : MonoBehaviour
             return;
         }
 
+        FireIfCooledDown(enemy);
+    }
+
+    void OnTriggerStay2D(Collider2D other)
+    {
+        EnemyController enemy = other.GetComponent<EnemyController>();
+
+        if (enemy == null)
+        {
+            return;
+        }
+
+        FireIfCooledDown(enemy);
+    }
+
+    void FireIfCooledDown(EnemyController enemy)
+    {
         if (_cooldownCounterSec != attackCooldownSec)
         {
             return;
         }
 
         FireAt(enemy);
+
+        _cooldownCounterSec = 0.0f;
     }
 
     void FireAt(EnemyController enemy)
     {
-
+        Debug.Log("Baboom bitch!");
     }
 }
