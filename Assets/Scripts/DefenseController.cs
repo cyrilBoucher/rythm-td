@@ -67,6 +67,13 @@ public class DefenseController : MonoBehaviour
 
     void FireAt(EnemyController enemy)
     {
-        Debug.Log("Baboom bitch!");
+        Vector3 direction = enemy.transform.position - transform.position;
+
+        // TODO: Uncomment when ProjectileController is added
+        /*ProjectileController projectileController = projectileGameObject.GetComponent<ProjectileController>();
+        projectileController.direction = direction.normalized;
+        projectileController.speed = 1.0f;*/
+
+        Instantiate(projectileGameObject, transform.position, Quaternion.identity);
     }
 }
