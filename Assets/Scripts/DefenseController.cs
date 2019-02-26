@@ -4,15 +4,13 @@ using UnityEngine;
 
 public class DefenseController : MonoBehaviour
 {
-    private CircleCollider2D _areaOfAttackCollider2D;
     public GameObject projectileGameObject;
-    public float attackCooldownSec;
     private float _cooldownCounterSec;
+    public float attackCooldownSec;
 
     // Start is called before the first frame update
     void Start()
     {
-        _areaOfAttackCollider2D = GetComponent<CircleCollider2D>();
         _cooldownCounterSec = attackCooldownSec;
     }
 
@@ -67,12 +65,18 @@ public class DefenseController : MonoBehaviour
 
     void FireAt(EnemyController enemy)
     {
+        ProjectileController projectileController = projectileGameObject.GetComponent<ProjectileController>();
+
+        if (projectileController == null)
+        {
+            Debug.LogError("Could not find ProjectileController script from prpjectile GameObject");
+
+            return;
+        }
+
         Vector3 direction = enemy.transform.position - transform.position;
 
-        // TODO: Uncomment when ProjectileController is added
-        /*ProjectileController projectileController = projectileGameObject.GetComponent<ProjectileController>();
-        projectileController.direction = direction.normalized;
-        projectileController.speed = 1.0f;*/
+        projectileController.direction = direction;
 
         Instantiate(projectileGameObject, transform.position, Quaternion.identity);
     }
