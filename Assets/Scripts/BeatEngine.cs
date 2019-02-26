@@ -54,6 +54,14 @@ public static class BeatEngine {
         return (_secondsPerBeat - (ellapsedTime % _secondsPerBeat));
     }
 
+    public static float TimeToBeatIdSec(int beatId)
+    {
+        float ellapsedTime = Time.time - _startTimeSec;
+        float timeOnBeatId = _secondsPerBeat * beatId;
+
+        return ellapsedTime - timeOnBeatId;
+    }
+
     // Returns the time to the closest beat.
     // If the returned time is negative, the closest beat is next
     // If the returned time is positive, the closest beat is passed

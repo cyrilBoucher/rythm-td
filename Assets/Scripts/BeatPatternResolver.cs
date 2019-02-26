@@ -4,124 +4,162 @@ using UnityEngine;
 public class BeatPatternResolver
 {
     private BeatPattern _beatPattern;
-    private int beatIdToValidate;
-    private int currentPatternIndex = 0;
+    private int _beatIdToValidate;
+    private int _currentPatternIndex = 0;
     public float validationOffset = 0.2f;
+
+    public enum ReturnType
+    {
+        Early,
+        Late,
+        WrongNote,
+        WrongBeat,
+        Missed,
+        Good,
+        Waiting,
+        Validated
+    }
 
     public void SetPattern(BeatPattern pattern)
     {
         _beatPattern = pattern;
     }
 
-    // This function can be called at any time during execution
-    // to start validating the current beat pattern. It is the responsibility
-    // of the caller to call it enough times to validate the whole patter.
-    // This function will return either true or false whether the pattern
-    // was validated or not.
-    public bool Run()
+    public ReturnType Run2(bool input)
     {
-        float timeToClosestBeatSec = BeatEngine.TimeToClosestBeatSec();
-
-        if (currentPatternIndex == 0)
+        if (_currentPatternIndex == 0)
         {
-            if (timeToClosestBeatSec > validationOffset)
+            _beatIdToValidate = BeatEngine.ClosestBeatId();
+            ReturnType result = Run(BeatEngine.TimeToClosestBeatSec(), input);
+
+            // In this particular missed means we have not started the
+            // pattern
+            if (result == ReturnType.Missed)
             {
-                beatIdToValidate = BeatEngine.BeatId();
+                return ReturnType.Waiting;
             }
             else
             {
-                beatIdToValidate = BeatEngine.ClosestBeatId();
+                return result;
+            }
+        }
+        else
+        {
+            return Run(BeatEngine.TimeToBeatIdSec(_beatIdToValidate), input);
+        }
+    }
+
+    // This function can be called at any time during execution
+    // to start validating the current beat pattern. It is the responsibility
+    // of the caller to call it enough times to validate the whole pattern.
+    // This function will return an enumerator describing the success or failure.
+    public ReturnType Run(float timeToNextBeatIdToValidateSec, bool input)
+    {
+        // Success
+        // Hit the beat correctly
+        if (input &&
+            Math.Abs(timeToNextBeatIdToValidateSec) <= validationOffset &&
+            _beatPattern.At(_currentPatternIndex) == BeatPattern.Input.OnBeat)
+        {
+            return Success();
+        }
+
+        // Success
+        // Skipped the beat correctly
+        if (!input &&
+            timeToNextBeatIdToValidateSec > validationOffset &&
+            _beatPattern.At(_currentPatternIndex) == BeatPattern.Input.SkipBeat)
+        {
+            return Success();
+        }
+
+        // Fail
+        // Either hit before or after the beat
+        if (input &&
+            Math.Abs(timeToNextBeatIdToValidateSec) > validationOffset &&
+            _beatPattern.At(_currentPatternIndex) == BeatPattern.Input.OnBeat)
+        {
+            Failure();
+
+            if (timeToNextBeatIdToValidateSec < 0.0f)
+            {
+                return ReturnType.Early;
+            }
+            else
+            {
+                return ReturnType.Late;
             }
         }
 
-        // Success
-        if (Input.GetMouseButtonDown(0) &&
-            Math.Abs(timeToClosestBeatSec) <= validationOffset &&
-            _beatPattern.At(currentPatternIndex) == BeatPattern.Input.OnBeat &&
-            beatIdToValidate == BeatEngine.ClosestBeatId())
+        // Fail
+        // Hit the beat when it should have been skipped
+        if (input &&
+            _beatPattern.At(_currentPatternIndex) == BeatPattern.Input.SkipBeat)
         {
-            Debug.Log(String.Format("Success on beat at frame {0}", Time.frameCount));
+            Failure();
 
-            return Success();
-        }
-
-        // Success
-        if (!Input.GetMouseButtonDown(0) &&
-            timeToClosestBeatSec > validationOffset &&
-            _beatPattern.At(currentPatternIndex) == BeatPattern.Input.SkipBeat &&
-            beatIdToValidate == BeatEngine.ClosestBeatId())
-        {
-            Debug.Log("Success skip beat");
-
-            return Success();
+            return ReturnType.WrongNote;
         }
 
         // Fail
-        if (Input.GetMouseButtonDown(0) &&
-            Math.Abs(timeToClosestBeatSec) > validationOffset)
+        // Did not hit the beat
+        if (!input &&
+            timeToNextBeatIdToValidateSec > validationOffset &&
+            _beatPattern.At(_currentPatternIndex) == BeatPattern.Input.OnBeat)
         {
-            Debug.Log(String.Format("Failure: pressed outside zone at frame {0}", Time.frameCount));
+            Failure();
 
-            return Failure();
+            return ReturnType.Missed;
         }
 
-        // Fail
-        if (currentPatternIndex != 0 &&
-            !Input.GetMouseButtonDown(0) &&
-            timeToClosestBeatSec > validationOffset &&
-            _beatPattern.At(currentPatternIndex) == BeatPattern.Input.OnBeat &&
-            beatIdToValidate == BeatEngine.ClosestBeatId())
-        {
-            Debug.Log("Failure: no press when it should have been pressed");
-
-            return Failure();
-        }
-
-        // Fail
-        if (Input.GetMouseButtonDown(0) &&
-            Math.Abs(timeToClosestBeatSec) <= validationOffset &&
-            _beatPattern.At(currentPatternIndex) == BeatPattern.Input.SkipBeat)
-        {
-            Debug.Log("Failure: pressed, should have skipped");
-
-            return Failure();
-        }
-
-        // Fail
-        if (Input.GetMouseButtonDown(0) &&
-            Math.Abs(timeToClosestBeatSec) <= validationOffset &&
-            _beatPattern.At(currentPatternIndex) == BeatPattern.Input.OnBeat &&
-            beatIdToValidate != BeatEngine.ClosestBeatId())
-        {
-            Debug.Log("Failure: pressed on wrong beat");
-
-            return Failure();
-        }
-
-        return false;
+        // Called in between inputs, waiting for next call
+        return ReturnType.Waiting;
     }
 
-    bool Success()
+    // Returns whether this current call of Success()
+    // either validates the whole pattern or not
+    ReturnType Success()
     {
-        currentPatternIndex++;
+        _currentPatternIndex++;
 
-        if (currentPatternIndex == _beatPattern.pattern.Count)
+        if (_currentPatternIndex == _beatPattern.pattern.Count)
         {
-            Debug.Log("Success");
-            currentPatternIndex = 0;
+            _currentPatternIndex = 0;
 
-            return true;
+            return ReturnType.Validated;
         }
 
-        beatIdToValidate++;
+        _beatIdToValidate++;
 
-        return false;
+        return ReturnType.Good;
     }
 
-    bool Failure()
+    void Failure()
     {
-        currentPatternIndex = 0;
+        _currentPatternIndex = 0;
+    }
 
-        return false;
+    public String EnumToString(ReturnType returnType)
+    {
+        switch(returnType)
+        {
+            case ReturnType.Early:
+                return "Early";
+            case ReturnType.Late:
+                return "Late";
+            case ReturnType.Missed:
+                return "Missed";
+            case ReturnType.WrongBeat:
+                return "WrongBeat";
+            case ReturnType.WrongNote:
+                return "WrongNote";
+            case ReturnType.Good:
+                return "Good";
+            case ReturnType.Validated:
+                return "Validated";
+            default:
+            case ReturnType.Waiting:
+                return "Waiting";
+        }
     }
 }
