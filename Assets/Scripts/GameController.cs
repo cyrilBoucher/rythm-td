@@ -11,6 +11,8 @@ public class GameController : MonoBehaviour {
 	void Start () {
         beatCountText.text = "0";
 
+        Map.LoadMap();
+
         BeatEngine.StartBeat(120);
     }
 

@@ -4,33 +4,62 @@ using UnityEngine;
 
 public class EnemyController : MonoBehaviour {
 
-    private Vector3 nextPosition;
-    private float smoothTime = 1.0f;
-    private int currentBeatId = 0;
-    private Vector3 velocity;
-    private BoxCollider2D _boundingBox;
+    private Vector3 _nextPosition;
+    private float _smoothTime = 1.0f;
+    private int _currentBeatId = 0;
+    private Vector3 _velocity;
+    public EnemyRoute route;
     public int life;
-    private Vector3 _spawnPosition;
+    public int damage;
 
-	// Use this for initialization
-	void Start ()
+    // Use this for initialization
+    void Start ()
     {
-        _spawnPosition = transform.position;
+        route = Map.enemyRoute;
+
+        transform.position = route.Next();
+
+        _nextPosition = route.Next();
+        _smoothTime = BeatEngine.RemainingTimeUntilNextBeatSec() / 2.0f;
     }
 
 	// Update is called once per frame
 	void Update ()
     {
         int beatEngineId = BeatEngine.BeatId();
-        if (beatEngineId != currentBeatId)
+        if (beatEngineId != _currentBeatId)
         {
-            Vector3 direction = new Vector3(1.0f, 0.0f, 0.0f);
-            nextPosition = transform.position + direction;
-            smoothTime = BeatEngine.RemainingTimeUntilNextBeatSec() / 2.0f;
-            currentBeatId = beatEngineId;
+            _nextPosition = route.Next();
+            if (_nextPosition == Vector3.zero)
+            {
+                // destination reached
+                return;
+            }
+
+            _smoothTime = BeatEngine.RemainingTimeUntilNextBeatSec() / 2.0f;
+            _currentBeatId = beatEngineId;
         }
 
-        transform.position = Vector3.SmoothDamp(transform.position, nextPosition, ref velocity, smoothTime);
+        transform.position = Vector3.SmoothDamp(transform.position, _nextPosition, ref _velocity, _smoothTime);
+    }
+
+    void OnCollisionEnter2D(Collision2D other)
+    {
+        BaseController playerBase = other.collider.GetComponent<BaseController>();
+
+        if (playerBase == null)
+        {
+            return;
+        }
+
+        DealDamage(playerBase);
+    }
+
+    void DealDamage(BaseController playerBase)
+    {
+        playerBase.TakeDamage(damage);
+
+        Destroy(this.gameObject);
     }
 
     public void TakeDamage(int damage)
