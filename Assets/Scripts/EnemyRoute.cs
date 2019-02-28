@@ -7,6 +7,19 @@ public class EnemyRoute
     private List<Vector3> _positions = new List<Vector3>();
     private int _currentIndex = 0;
 
+    public EnemyRoute()
+    {
+
+    }
+
+    public EnemyRoute(EnemyRoute toCopy)
+    {
+        foreach (Vector3 position in toCopy._positions)
+        {
+            _positions.Add(new Vector3(position.x, position.y, position.z));
+        }
+    }
+
     public void Set(List<Vector3> positions)
     {
         _positions = positions;

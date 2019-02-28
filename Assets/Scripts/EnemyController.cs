@@ -15,12 +15,13 @@ public class EnemyController : MonoBehaviour {
     // Use this for initialization
     void Start ()
     {
-        route = Map.enemyRoute;
+        route = new EnemyRoute(Map.enemyRoute);
 
         transform.position = route.Next();
 
         _nextPosition = route.Next();
         _smoothTime = BeatEngine.RemainingTimeUntilNextBeatSec() / 2.0f;
+        _currentBeatId = BeatEngine.BeatId();
     }
 
 	// Update is called once per frame
