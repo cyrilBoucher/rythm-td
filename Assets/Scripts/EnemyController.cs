@@ -15,7 +15,15 @@ public class EnemyController : MonoBehaviour {
     // Use this for initialization
     void Start ()
     {
-        route = new EnemyRoute(Map.enemyRoute);
+        if (Map.enemyRoute != null)
+        {
+            route = new EnemyRoute(Map.enemyRoute);
+        }
+
+        if (route == null)
+        {
+            return;
+        }
 
         transform.position = route.Next();
 
@@ -27,6 +35,11 @@ public class EnemyController : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
+        if (route == null)
+        {
+            return;
+        }
+
         int beatEngineId = BeatEngine.BeatId();
         if (beatEngineId != _currentBeatId)
         {

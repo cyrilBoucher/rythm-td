@@ -14,8 +14,11 @@ public class EnemySpawner : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        transform.position = Map.enemySpawnPosition;
         _spawnCooldownSec = spawnInterval;
+        if (Map.enemySpawnPosition != null)
+        {
+            transform.position = Map.enemySpawnPosition;
+        }
     }
 
     // Update is called once per frame
