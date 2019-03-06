@@ -6,12 +6,16 @@ using UnityEngine.UI;
 public class GameController : MonoBehaviour {
 
     public Text beatCountText;
+    public bool loadMap = true;
 
 	// Use this for initialization
 	void Start () {
         beatCountText.text = "0";
 
-        Map.LoadMap();
+        if (loadMap)
+        {
+            Map.LoadMap();
+        }
 
         BeatEngine.StartBeat(120);
     }

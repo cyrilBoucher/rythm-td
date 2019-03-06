@@ -6,39 +6,74 @@ public class EnemySpawner : MonoBehaviour
 {
     public GameObject enemyGameObject;
     public int enemiesToSpawn;
-    public float spawnInterval;
+    public int spawnIntervalBeat;
+    public int enemyWaves;
+    public int waveIntervalBeat;
 
-    private float _spawnCooldownSec;
+    private int _spawnCooldownBeat;
     private int _spawnedEnemies = 0;
+    private int _waveCooldownBeat;
+    private int _spawnedWaves = 0;
+    private int _currentBeatId;
 
     // Start is called before the first frame update
     void Start()
     {
-        _spawnCooldownSec = spawnInterval;
         if (Map.enemySpawnPosition != null)
         {
             transform.position = Map.enemySpawnPosition;
         }
+
+        _spawnCooldownBeat = spawnIntervalBeat;
+        _waveCooldownBeat = 0;
+        _currentBeatId = BeatEngine.BeatId();
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (_spawnedWaves >= enemyWaves)
+        {
+            return;
+        }
+
         if (_spawnedEnemies >= enemiesToSpawn)
         {
+            if (_currentBeatId != BeatEngine.BeatId())
+            {
+                _waveCooldownBeat++;
+
+                _currentBeatId = BeatEngine.BeatId();
+            }
+
+            if (_waveCooldownBeat >= waveIntervalBeat)
+            {
+                _spawnedEnemies = 0;
+
+                _waveCooldownBeat = 0;
+
+                _spawnedWaves++;
+            }
+
             return;
         }
 
-        if (_spawnCooldownSec >= spawnInterval)
+        if (_spawnCooldownBeat >= spawnIntervalBeat)
         {
             Instantiate(enemyGameObject, transform.position, Quaternion.identity);
+
             _spawnedEnemies++;
 
-            _spawnCooldownSec = 0.0f;
+            _spawnCooldownBeat = 0;
 
             return;
         }
 
-        _spawnCooldownSec += Time.deltaTime;
+        if (_currentBeatId != BeatEngine.BeatId())
+        {
+            _spawnCooldownBeat++;
+
+            _currentBeatId = BeatEngine.BeatId();
+        }
     }
 }

@@ -88,6 +88,11 @@ PrefabInstance:
       propertyPath: m_WasSpriteAssigned
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1044226741493193038, guid: f5f31c11e811ba74eaee1192b44a78ab,
+        type: 3}
+      propertyPath: m_Radius
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 1044226741493193043, guid: f5f31c11e811ba74eaee1192b44a78ab,
         type: 3}
       propertyPath: attackCooldownSec
@@ -99,10 +104,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 4311362812333546666, guid: 40ae8c49753a9034d8e0dcbbc295f693,
         type: 3}
-    - target: {fileID: 1044226741493193038, guid: f5f31c11e811ba74eaee1192b44a78ab,
+    - target: {fileID: 1044226741493193043, guid: f5f31c11e811ba74eaee1192b44a78ab,
         type: 3}
-      propertyPath: m_Radius
-      value: 3
+      propertyPath: attackCooldownBeat
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f5f31c11e811ba74eaee1192b44a78ab, type: 3}

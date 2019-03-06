@@ -5,62 +5,84 @@ using UnityEngine;
 public class DefenseController : MonoBehaviour
 {
     public GameObject projectileGameObject;
-    private float _cooldownCounterSec;
-    public float attackCooldownSec;
+    public int attackCooldownBeat;
+
+    private int _cooldownCounterBeat;
+    private int _currentBeatId;
+    private int _enemiesInRange;
 
     // Start is called before the first frame update
     void Start()
     {
-        _cooldownCounterSec = attackCooldownSec;
+        _cooldownCounterBeat = attackCooldownBeat;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (_cooldownCounterSec < attackCooldownSec)
-        {
-            _cooldownCounterSec += Time.deltaTime;
-        }
-        else
-        {
-            _cooldownCounterSec = attackCooldownSec;
-        }
+
     }
 
-    void OnTriggerEnter2D(Collider2D other)
+    void OnTriggerEnter2D(Collider2D collision)
     {
-        EnemyController enemy = other.GetComponent<EnemyController>();
+        EnemyController enemy = collision.GetComponent<EnemyController>();
 
         if (enemy == null)
         {
             return;
         }
 
+        if (_enemiesInRange == 0)
+        {
+            _currentBeatId = BeatEngine.BeatId();
+        }
+
+        _enemiesInRange++;
+
         FireIfCooledDown(enemy);
     }
 
-    void OnTriggerStay2D(Collider2D other)
+    void OnTriggerStay2D(Collider2D collision)
     {
-        EnemyController enemy = other.GetComponent<EnemyController>();
+        EnemyController enemy = collision.GetComponent<EnemyController>();
 
         if (enemy == null)
         {
             return;
         }
 
+        if (_currentBeatId != BeatEngine.BeatId())
+        {
+            _cooldownCounterBeat++;
+
+            _currentBeatId = BeatEngine.BeatId();
+        }
+
         FireIfCooledDown(enemy);
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        EnemyController enemy = collision.GetComponent<EnemyController>();
+
+        if (enemy == null)
+        {
+            return;
+        }
+
+        _enemiesInRange--;
     }
 
     void FireIfCooledDown(EnemyController enemy)
     {
-        if (_cooldownCounterSec != attackCooldownSec)
+        if (_cooldownCounterBeat < attackCooldownBeat)
         {
             return;
         }
 
         FireAt(enemy);
 
-        _cooldownCounterSec = 0.0f;
+        _cooldownCounterBeat = 0;
     }
 
     void FireAt(EnemyController enemy)
