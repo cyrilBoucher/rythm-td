@@ -109,5 +109,10 @@ PrefabInstance:
       propertyPath: attackCooldownBeat
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 1044226741493193043, guid: f5f31c11e811ba74eaee1192b44a78ab,
+        type: 3}
+      propertyPath: price
+      value: 20
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f5f31c11e811ba74eaee1192b44a78ab, type: 3}

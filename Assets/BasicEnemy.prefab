@@ -12,6 +12,52 @@ PrefabInstance:
       propertyPath: m_Name
       value: BasicEnemy
       objectReference: {fileID: 0}
+    - target: {fileID: 3883359029300959499, guid: 52f95dcc9d8c27144abc538edc7b13c8,
+        type: 3}
+      propertyPath: life
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3883359029300959499, guid: 52f95dcc9d8c27144abc538edc7b13c8,
+        type: 3}
+      propertyPath: damage
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3883359029300959499, guid: 52f95dcc9d8c27144abc538edc7b13c8,
+        type: 3}
+      propertyPath: reward
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 3883359029300959499, guid: 52f95dcc9d8c27144abc538edc7b13c8,
+        type: 3}
+      propertyPath: resourcesController
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3883359029300959498, guid: 52f95dcc9d8c27144abc538edc7b13c8,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: ff84aacc54bb8d843be32e8d39412a39,
+        type: 3}
+    - target: {fileID: 3883359029300959498, guid: 52f95dcc9d8c27144abc538edc7b13c8,
+        type: 3}
+      propertyPath: m_Size.x
+      value: 1.13
+      objectReference: {fileID: 0}
+    - target: {fileID: 3883359029300959498, guid: 52f95dcc9d8c27144abc538edc7b13c8,
+        type: 3}
+      propertyPath: m_Size.y
+      value: 0.67
+      objectReference: {fileID: 0}
+    - target: {fileID: 3883359029300959498, guid: 52f95dcc9d8c27144abc538edc7b13c8,
+        type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3883359029300959498, guid: 52f95dcc9d8c27144abc538edc7b13c8,
+        type: 3}
+      propertyPath: m_FlipX
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3883359029300959497, guid: 52f95dcc9d8c27144abc538edc7b13c8,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -66,42 +112,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3883359029300959498, guid: 52f95dcc9d8c27144abc538edc7b13c8,
-        type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: ff84aacc54bb8d843be32e8d39412a39,
-        type: 3}
-    - target: {fileID: 3883359029300959498, guid: 52f95dcc9d8c27144abc538edc7b13c8,
-        type: 3}
-      propertyPath: m_Size.x
-      value: 1.13
-      objectReference: {fileID: 0}
-    - target: {fileID: 3883359029300959498, guid: 52f95dcc9d8c27144abc538edc7b13c8,
-        type: 3}
-      propertyPath: m_Size.y
-      value: 0.67
-      objectReference: {fileID: 0}
-    - target: {fileID: 3883359029300959498, guid: 52f95dcc9d8c27144abc538edc7b13c8,
-        type: 3}
-      propertyPath: m_WasSpriteAssigned
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3883359029300959498, guid: 52f95dcc9d8c27144abc538edc7b13c8,
-        type: 3}
-      propertyPath: m_FlipX
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3883359029300959499, guid: 52f95dcc9d8c27144abc538edc7b13c8,
-        type: 3}
-      propertyPath: life
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 3883359029300959499, guid: 52f95dcc9d8c27144abc538edc7b13c8,
-        type: 3}
-      propertyPath: damage
-      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3883359029300959496, guid: 52f95dcc9d8c27144abc538edc7b13c8,
         type: 3}

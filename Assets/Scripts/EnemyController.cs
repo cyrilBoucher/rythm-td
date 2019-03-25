@@ -8,9 +8,12 @@ public class EnemyController : MonoBehaviour {
     private float _smoothTime = 1.0f;
     private int _currentBeatId = 0;
     private Vector3 _velocity;
+
+    public ResourcesController resourcesController;
     public EnemyRoute route;
     public int life;
     public int damage;
+    public int reward;
 
     // Use this for initialization
     void Start ()
@@ -82,6 +85,8 @@ public class EnemyController : MonoBehaviour {
 
         if (life <= 0)
         {
+            resourcesController.resourcesNumber += reward;
+
             Destroy(this.gameObject);
         }
     }

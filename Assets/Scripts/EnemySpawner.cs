@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
+    public ResourcesController resourcesController;
     public GameObject enemyGameObject;
     public int enemiesToSpawn;
     public int spawnIntervalBeat;
@@ -60,6 +61,8 @@ public class EnemySpawner : MonoBehaviour
 
         if (_spawnCooldownBeat >= spawnIntervalBeat)
         {
+            EnemyController enemyController = enemyGameObject.GetComponent<EnemyController>();
+            enemyController.resourcesController = resourcesController;
             Instantiate(enemyGameObject, transform.position, Quaternion.identity);
 
             _spawnedEnemies++;

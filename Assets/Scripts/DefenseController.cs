@@ -6,6 +6,7 @@ public class DefenseController : MonoBehaviour
 {
     public GameObject projectileGameObject;
     public int attackCooldownBeat;
+    public int price;
 
     private int _cooldownCounterBeat;
     private int _currentBeatId;

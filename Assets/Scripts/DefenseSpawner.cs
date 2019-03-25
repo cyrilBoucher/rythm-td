@@ -7,6 +7,7 @@ public class DefenseSpawner : MonoBehaviour {
 
     private BeatPattern _beatPattern = new BeatPattern();
     private BeatPatternResolver _beatPatternResolver = new BeatPatternResolver();
+    public ResourcesController resourcesController;
     public GameObject defenseGameObject;
 
     // Use this for initialization
@@ -31,7 +32,13 @@ public class DefenseSpawner : MonoBehaviour {
 
         if (result == BeatPatternResolver.ReturnType.Validated)
         {
-            Instantiate(defenseGameObject, transform.position, Quaternion.identity);
+            DefenseController defenseController = defenseGameObject.GetComponent<DefenseController>();
+
+            if (resourcesController.resourcesNumber >= defenseController.price)
+            {
+                Instantiate(defenseGameObject, transform.position, Quaternion.identity);
+                resourcesController.resourcesNumber -= defenseController.price;
+            }
         }
     }
 
