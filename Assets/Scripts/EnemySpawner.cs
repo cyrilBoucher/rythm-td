@@ -20,11 +20,6 @@ public class EnemySpawner : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if (Map.enemySpawnPosition != null)
-        {
-            transform.position = Map.enemySpawnPosition;
-        }
-
         _spawnCooldownBeat = spawnIntervalBeat;
         _waveCooldownBeat = 0;
         _currentBeatId = BeatEngine.BeatId();
