@@ -44,4 +44,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   resourcesText: {fileID: 0}
-  resourcesNumber: 200
+  resourcesNumber: 20
