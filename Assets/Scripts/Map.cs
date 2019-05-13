@@ -10,6 +10,7 @@ public class Map
     public static Vector3 enemySpawnPosition;
     public static Vector3 basePosition;
     public static List<Vector3> defenseSpawnPositions;
+    public static Vector2 mapDimensions;
     private static string _mapResourceName;
     private const string WrongMapFormatErrorMessage = "Wrong format used in {0}";
 
@@ -30,6 +31,11 @@ public class Map
 
         Dictionary<String, List<int[]>> parsed = deserializer.Deserialize<Dictionary<String, List<int[]>>>(textAsset.text);
 
+        if (!DeserializeMapDimensions(parsed))
+        {
+            return false;
+        }
+
         if (!DeserializePlayerBasePosition(parsed))
         {
             return false;
@@ -46,6 +52,31 @@ public class Map
         }
 
         return DeserializeEnemyRoute(parsed);
+    }
+
+    static private bool DeserializeMapDimensions(Dictionary<String, List<int[]>> deserializedMapData)
+    {
+        List<int[]> deserializedMapDimensions = deserializedMapData["Layout_dims"];
+
+        if (deserializedMapDimensions.Count != 1)
+        {
+            Debug.LogError(String.Format(WrongMapFormatErrorMessage, _mapResourceName));
+
+            return false;
+        }
+
+        int[] deserializedMapDimensionsVector2 = deserializedMapDimensions[0];
+
+        if (deserializedMapDimensionsVector2.Length != 2)
+        {
+            Debug.LogError(String.Format(WrongMapFormatErrorMessage, _mapResourceName));
+
+            return false;
+        }
+
+        mapDimensions = new Vector2(deserializedMapDimensionsVector2[1], deserializedMapDimensionsVector2[0]);
+
+        return true;
     }
 
     static private bool DeserializePlayerBasePosition(Dictionary<String, List<int[]>> deserializedMapData)

@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class GameController : MonoBehaviour {
 
     public string mapResourceName;
+    public Camera mainCamera;
     public GameObject resourcesController;
     public GameObject enemySpawnerGameObject;
     public GameObject defenseSpawnerGameObject;
@@ -33,6 +34,12 @@ public class GameController : MonoBehaviour {
             {
                 Instantiate(defenseSpawnerGameObject, defenseSpawnerPosition, Quaternion.identity);
             }
+
+            // Make sure we see all the map
+            // -10 is used as z to see elements usually positioned at z = 0
+            // add 1 to orthographic size to that the top and bottom of map show inside view
+            mainCamera.transform.position = new Vector3(Map.mapDimensions.x / 2.0f, Map.mapDimensions.y / 2.0f, -10.0f);
+            mainCamera.orthographicSize = Map.mapDimensions.y / 2.0f + 1.0f;
         }
 
         BeatEngine.StartBeat(120);
