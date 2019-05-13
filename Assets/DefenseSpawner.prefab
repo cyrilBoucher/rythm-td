@@ -98,14 +98,14 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1.28, y: 1.28}
+    oldSize: {x: 1, y: 1}
     newSize: {x: 1.28, y: 1.28}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1.28, y: 1.28}
+  m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
 --- !u!114 &5340297808430293425
 MonoBehaviour:
@@ -119,5 +119,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1a04516098b4c342ba156e3d2cd8c33, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defenseGameObject: {fileID: 3588488484636857727, guid: 655625c90e73150498c8bcd219906abb,
+  resourcesController: {fileID: 0}
+  worldSpaceCanvasGameObject: {fileID: 0}
+  inputFeedbackTextPrefab: {fileID: 302928808805573940, guid: afa3575a47468ea48bccc282af401c37,
+    type: 3}
+  defensePrefab: {fileID: 3588488484636857727, guid: 655625c90e73150498c8bcd219906abb,
     type: 3}
