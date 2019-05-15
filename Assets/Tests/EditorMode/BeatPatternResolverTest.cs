@@ -8,176 +8,197 @@ namespace Tests
 {
     public class BeatPatternResolverTest
     {
-        [Test]
-        public void BeatPatternResolverTest_ShouldResolveTwoElementsPattern()
-        {
-            BeatPatternResolver resolver = new BeatPatternResolver();
+        public BeatPatternResolver resolver;
 
+        [SetUp]
+        public void SetUp()
+        {
+            resolver = new BeatPatternResolver();
+        }
+
+        [Test, Combinatorial]
+        public void BeatPatternResolverTest_ShouldResolveTwoElementsPattern(
+            [Values(BeatPattern.Input.Tap, BeatPattern.Input.SlideDown, BeatPattern.Input.SlideUp, BeatPattern.Input.SlideLeft, BeatPattern.Input.SlideRight)] BeatPattern.Input patternElement1,
+            [Values(BeatPattern.Input.Tap, BeatPattern.Input.SlideDown, BeatPattern.Input.SlideUp, BeatPattern.Input.SlideLeft, BeatPattern.Input.SlideRight)] BeatPattern.Input patternElement2)
+        {
             BeatPattern pattern = new BeatPattern();
-            pattern.pattern.Add(BeatPattern.Input.OnBeat);
-            pattern.pattern.Add(BeatPattern.Input.OnBeat);
+            pattern.pattern.Add(patternElement1);
+            pattern.pattern.Add(patternElement2);
 
             resolver.SetPattern(pattern);
 
             float timeToClosestBeatSec = resolver.validationOffset / 2.0f;
-            bool input = true;
-            BeatPatternResolver.ReturnType result = resolver.Run(timeToClosestBeatSec, input);
+            BeatPatternResolver.ReturnType result = resolver.Run(timeToClosestBeatSec, patternElement1);
 
             Assert.AreEqual(BeatPatternResolver.ReturnType.Good, result);
 
-            result = resolver.Run(timeToClosestBeatSec, input);
+            result = resolver.Run(timeToClosestBeatSec, patternElement2);
 
             Assert.AreEqual(BeatPatternResolver.ReturnType.Validated, result);
         }
 
         [Test]
-        public void BeatPatternResolver_ShouldFailMissingSecondInputOnBeat()
+        public void BeatPatternResolver_ShouldFailMissingSecondInput(
+            [Values(BeatPattern.Input.Tap, BeatPattern.Input.SlideDown, BeatPattern.Input.SlideUp, BeatPattern.Input.SlideLeft, BeatPattern.Input.SlideRight)] BeatPattern.Input patternElement1,
+            [Values(BeatPattern.Input.Tap, BeatPattern.Input.SlideDown, BeatPattern.Input.SlideUp, BeatPattern.Input.SlideLeft, BeatPattern.Input.SlideRight)] BeatPattern.Input patternElement2)
         {
-            BeatPatternResolver resolver = new BeatPatternResolver();
-
             BeatPattern pattern = new BeatPattern();
-            pattern.pattern.Add(BeatPattern.Input.OnBeat);
-            pattern.pattern.Add(BeatPattern.Input.OnBeat);
+            pattern.pattern.Add(patternElement1);
+            pattern.pattern.Add(patternElement2);
 
             resolver.SetPattern(pattern);
 
             float timeToClosestBeatSec = resolver.validationOffset / 2.0f;
-            bool input = true;
-            BeatPatternResolver.ReturnType result = resolver.Run(timeToClosestBeatSec, input);
+            BeatPatternResolver.ReturnType result = resolver.Run(timeToClosestBeatSec, patternElement1);
 
             Assert.AreEqual(BeatPatternResolver.ReturnType.Good, result);
 
-            input = false;
-
-            result = resolver.Run(timeToClosestBeatSec, input);
+            result = resolver.Run(timeToClosestBeatSec, BeatPattern.Input.Skip);
 
             Assert.AreEqual(BeatPatternResolver.ReturnType.Waiting, result);
 
             timeToClosestBeatSec = resolver.validationOffset + 1.0f;
 
-            result = resolver.Run(timeToClosestBeatSec, input);
+            result = resolver.Run(timeToClosestBeatSec, BeatPattern.Input.Skip);
 
             Assert.AreEqual(BeatPatternResolver.ReturnType.Missed, result);
         }
 
         [Test]
-        public void BeatPatternResolverTest_ShouldResolveThreeElementsPattern()
+        public void BeatPatternResolverTest_ShouldResolveThreeElementsPatternWithSkip(
+            [Values(BeatPattern.Input.Tap, BeatPattern.Input.SlideDown, BeatPattern.Input.SlideUp, BeatPattern.Input.SlideLeft, BeatPattern.Input.SlideRight)] BeatPattern.Input patternElement1,
+            [Values(BeatPattern.Input.Tap, BeatPattern.Input.SlideDown, BeatPattern.Input.SlideUp, BeatPattern.Input.SlideLeft, BeatPattern.Input.SlideRight)] BeatPattern.Input patternElement2)
         {
-            BeatPatternResolver resolver = new BeatPatternResolver();
-
             BeatPattern pattern = new BeatPattern();
-            pattern.pattern.Add(BeatPattern.Input.OnBeat);
-            pattern.pattern.Add(BeatPattern.Input.SkipBeat);
-            pattern.pattern.Add(BeatPattern.Input.OnBeat);
+            pattern.pattern.Add(patternElement1);
+            pattern.pattern.Add(BeatPattern.Input.Skip);
+            pattern.pattern.Add(patternElement2);
 
             resolver.SetPattern(pattern);
 
             float timeToClosestBeatSec = resolver.validationOffset / 2.0f;
-            bool input = true;
-            BeatPatternResolver.ReturnType result = resolver.Run(timeToClosestBeatSec, input);
+            BeatPatternResolver.ReturnType result = resolver.Run(timeToClosestBeatSec, patternElement1);
 
             Assert.AreEqual(BeatPatternResolver.ReturnType.Good, result);
 
             timeToClosestBeatSec = resolver.validationOffset + 1.0f;
-            input = false;
 
-            result = resolver.Run(timeToClosestBeatSec, input);
+            result = resolver.Run(timeToClosestBeatSec, BeatPattern.Input.Skip);
 
             Assert.AreEqual(BeatPatternResolver.ReturnType.Good, result);
 
             timeToClosestBeatSec = resolver.validationOffset / 2.0f;
-            input = true;
 
-            result = resolver.Run(timeToClosestBeatSec, input);
+            result = resolver.Run(timeToClosestBeatSec, patternElement2);
 
             Assert.AreEqual(BeatPatternResolver.ReturnType.Validated, result);
         }
 
         [Test]
-        public void BeatPatternResolverTest_ShouldFailMissingBeingEarlyOnLastInputOnBeat()
+        public void BeatPatternResolverTest_ShouldResolveThreeElementsPatternWithNoSkip(
+            [Values(BeatPattern.Input.Tap, BeatPattern.Input.SlideDown, BeatPattern.Input.SlideUp, BeatPattern.Input.SlideLeft, BeatPattern.Input.SlideRight)] BeatPattern.Input patternElement1,
+            [Values(BeatPattern.Input.Tap, BeatPattern.Input.SlideDown, BeatPattern.Input.SlideUp, BeatPattern.Input.SlideLeft, BeatPattern.Input.SlideRight)] BeatPattern.Input patternElement2,
+            [Values(BeatPattern.Input.Tap, BeatPattern.Input.SlideDown, BeatPattern.Input.SlideUp, BeatPattern.Input.SlideLeft, BeatPattern.Input.SlideRight)] BeatPattern.Input patternElement3)
         {
-            BeatPatternResolver resolver = new BeatPatternResolver();
-
             BeatPattern pattern = new BeatPattern();
-            pattern.pattern.Add(BeatPattern.Input.OnBeat);
-            pattern.pattern.Add(BeatPattern.Input.SkipBeat);
-            pattern.pattern.Add(BeatPattern.Input.OnBeat);
+            pattern.pattern.Add(patternElement1);
+            pattern.pattern.Add(patternElement2);
+            pattern.pattern.Add(patternElement3);
 
             resolver.SetPattern(pattern);
 
             float timeToClosestBeatSec = resolver.validationOffset / 2.0f;
-            bool input = true;
-            BeatPatternResolver.ReturnType result = resolver.Run(timeToClosestBeatSec, input);
+            BeatPatternResolver.ReturnType result = resolver.Run(timeToClosestBeatSec, patternElement1);
+
+            Assert.AreEqual(BeatPatternResolver.ReturnType.Good, result);
+
+            result = resolver.Run(timeToClosestBeatSec, patternElement2);
+
+            Assert.AreEqual(BeatPatternResolver.ReturnType.Good, result);
+
+            result = resolver.Run(timeToClosestBeatSec, patternElement3);
+
+            Assert.AreEqual(BeatPatternResolver.ReturnType.Validated, result);
+        }
+
+        [Test]
+        public void BeatPatternResolverTest_ShouldFailMissingBeingEarlyOnLastInput(
+            [Values(BeatPattern.Input.Tap, BeatPattern.Input.SlideDown, BeatPattern.Input.SlideUp, BeatPattern.Input.SlideLeft, BeatPattern.Input.SlideRight)] BeatPattern.Input patternElement1,
+            [Values(BeatPattern.Input.Tap, BeatPattern.Input.SlideDown, BeatPattern.Input.SlideUp, BeatPattern.Input.SlideLeft, BeatPattern.Input.SlideRight)] BeatPattern.Input patternElement2)
+        {
+            BeatPattern pattern = new BeatPattern();
+            pattern.pattern.Add(patternElement1);
+            pattern.pattern.Add(BeatPattern.Input.Skip);
+            pattern.pattern.Add(patternElement2);
+
+            resolver.SetPattern(pattern);
+
+            float timeToClosestBeatSec = resolver.validationOffset / 2.0f;
+            BeatPatternResolver.ReturnType result = resolver.Run(timeToClosestBeatSec, patternElement1);
 
             Assert.AreEqual(BeatPatternResolver.ReturnType.Good, result);
 
             timeToClosestBeatSec = resolver.validationOffset + 1.0f;
-            input = false;
 
-            result = resolver.Run(timeToClosestBeatSec, input);
+            result = resolver.Run(timeToClosestBeatSec, BeatPattern.Input.Skip);
 
             Assert.AreEqual(BeatPatternResolver.ReturnType.Good, result);
 
             timeToClosestBeatSec = -(resolver.validationOffset + 1.0f);
-            input = true;
 
-            result = resolver.Run(timeToClosestBeatSec, input);
+            result = resolver.Run(timeToClosestBeatSec, patternElement2);
 
             Assert.AreEqual(BeatPatternResolver.ReturnType.Early, result);
         }
 
         [Test]
-        public void BeatPatternResolverTest_ShouldFailMissingBeingLateOnLastInputOnBeat()
+        public void BeatPatternResolverTest_ShouldFailMissingBeingLateOnLastInput(
+            [Values(BeatPattern.Input.Tap, BeatPattern.Input.SlideDown, BeatPattern.Input.SlideUp, BeatPattern.Input.SlideLeft, BeatPattern.Input.SlideRight)] BeatPattern.Input patternElement1,
+            [Values(BeatPattern.Input.Tap, BeatPattern.Input.SlideDown, BeatPattern.Input.SlideUp, BeatPattern.Input.SlideLeft, BeatPattern.Input.SlideRight)] BeatPattern.Input patternElement2)
         {
-            BeatPatternResolver resolver = new BeatPatternResolver();
-
             BeatPattern pattern = new BeatPattern();
-            pattern.pattern.Add(BeatPattern.Input.OnBeat);
-            pattern.pattern.Add(BeatPattern.Input.SkipBeat);
-            pattern.pattern.Add(BeatPattern.Input.OnBeat);
+            pattern.pattern.Add(patternElement1);
+            pattern.pattern.Add(BeatPattern.Input.Skip);
+            pattern.pattern.Add(patternElement2);
 
             resolver.SetPattern(pattern);
 
             float timeToClosestBeatSec = resolver.validationOffset / 2.0f;
-            bool input = true;
-            BeatPatternResolver.ReturnType result = resolver.Run(timeToClosestBeatSec, input);
+            BeatPatternResolver.ReturnType result = resolver.Run(timeToClosestBeatSec, patternElement1);
 
             Assert.AreEqual(BeatPatternResolver.ReturnType.Good, result);
 
             timeToClosestBeatSec = resolver.validationOffset + 1.0f;
-            input = false;
 
-            result = resolver.Run(timeToClosestBeatSec, input);
+            result = resolver.Run(timeToClosestBeatSec, BeatPattern.Input.Skip);
 
             Assert.AreEqual(BeatPatternResolver.ReturnType.Good, result);
 
             timeToClosestBeatSec = resolver.validationOffset + 1.0f;
-            input = true;
 
-            result = resolver.Run(timeToClosestBeatSec, input);
+            result = resolver.Run(timeToClosestBeatSec, patternElement2);
 
             Assert.AreEqual(BeatPatternResolver.ReturnType.Late, result);
         }
 
         [Test]
-        public void BeatPatternResolverTest_ShouldFailHittingInsteadOfSkipping()
+        public void BeatPatternResolverTest_ShouldFailHittingInsteadOfSkipping(
+            [Values(BeatPattern.Input.Tap, BeatPattern.Input.SlideDown, BeatPattern.Input.SlideUp, BeatPattern.Input.SlideLeft, BeatPattern.Input.SlideRight)] BeatPattern.Input patternElement1,
+            [Values(BeatPattern.Input.Tap, BeatPattern.Input.SlideDown, BeatPattern.Input.SlideUp, BeatPattern.Input.SlideLeft, BeatPattern.Input.SlideRight)] BeatPattern.Input patternElement2)
         {
-            BeatPatternResolver resolver = new BeatPatternResolver();
-
             BeatPattern pattern = new BeatPattern();
-            pattern.pattern.Add(BeatPattern.Input.OnBeat);
-            pattern.pattern.Add(BeatPattern.Input.SkipBeat);
-            pattern.pattern.Add(BeatPattern.Input.OnBeat);
+            pattern.pattern.Add(patternElement1);
+            pattern.pattern.Add(BeatPattern.Input.Skip);
+            pattern.pattern.Add(patternElement2);
 
             resolver.SetPattern(pattern);
 
             float timeToClosestBeatSec = resolver.validationOffset / 2.0f;
-            bool input = true;
-            BeatPatternResolver.ReturnType result = resolver.Run(timeToClosestBeatSec, input);
+            BeatPatternResolver.ReturnType result = resolver.Run(timeToClosestBeatSec, patternElement1);
 
             Assert.AreEqual(BeatPatternResolver.ReturnType.Good, result);
 
-            result = resolver.Run(timeToClosestBeatSec, input);
+            result = resolver.Run(timeToClosestBeatSec, patternElement2);
 
             Assert.AreEqual(BeatPatternResolver.ReturnType.WrongNote, result);
         }

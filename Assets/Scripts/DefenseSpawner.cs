@@ -18,8 +18,8 @@ public class DefenseSpawner : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        _beatPattern.Add(BeatPattern.Input.OnBeat);
-        _beatPattern.Add(BeatPattern.Input.OnBeat);
+        _beatPattern.Add(BeatPattern.Input.Tap);
+        _beatPattern.Add(BeatPattern.Input.Tap);
 
         _beatPatternResolver.SetPattern(_beatPattern);
 
@@ -37,7 +37,7 @@ public class DefenseSpawner : MonoBehaviour {
     // Update is called once per frame
     void Update () {
 
-        bool input = CheckForInput();
+        BeatPattern.Input input = CheckForInput();
 
         BeatPatternResolver.ReturnType result = _beatPatternResolver.Run2(input);
 
@@ -80,7 +80,7 @@ public class DefenseSpawner : MonoBehaviour {
         }
     }
 
-    bool CheckForInput()
+    BeatPattern.Input CheckForInput()
     {
         if (Input.GetMouseButtonDown(0))
         {
@@ -92,11 +92,11 @@ public class DefenseSpawner : MonoBehaviour {
             {
                 if (hit.transform.GetComponent<BoxCollider2D>() == GetComponent<BoxCollider2D>())
                 {
-                    return true;
+                    return BeatPattern.Input.Tap;
                 }
             }
         }
 
-        return false;
+        return BeatPattern.Input.Skip;
     }
 }

@@ -6,8 +6,12 @@ public class BeatPattern : IEnumerable
 {
     public enum Input
     {
-        OnBeat,
-        SkipBeat
+        Tap,
+        Skip,
+        SlideDown,
+        SlideUp,
+        SlideLeft,
+        SlideRight
     }
 
     public List<Input> pattern = new List<Input>();

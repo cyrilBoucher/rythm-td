@@ -25,14 +25,14 @@ public class BeatPatternResolver
         _beatPattern = pattern;
     }
 
-    public ReturnType Run2(bool input)
+    public ReturnType Run2(BeatPattern.Input input)
     {
         if (_currentPatternIndex == 0)
         {
             _beatIdToValidate = BeatEngine.ClosestBeatId();
             ReturnType result = Run(BeatEngine.TimeToClosestBeatSec(), input);
 
-            // In this particular missed means we have not started the
+            // In this particular case missed means we have not started the
             // pattern
             if (result == ReturnType.Missed)
             {
@@ -53,31 +53,31 @@ public class BeatPatternResolver
     // to start validating the current beat pattern. It is the responsibility
     // of the caller to call it enough times to validate the whole pattern.
     // This function will return an enumerator describing the success or failure.
-    public ReturnType Run(float timeToNextBeatIdToValidateSec, bool input)
+    public ReturnType Run(float timeToNextBeatIdToValidateSec, BeatPattern.Input input)
     {
         // Success
         // Hit the beat correctly
-        if (input &&
+        if (input != BeatPattern.Input.Skip &&
             Math.Abs(timeToNextBeatIdToValidateSec) <= validationOffset &&
-            _beatPattern.At(_currentPatternIndex) == BeatPattern.Input.OnBeat)
+            _beatPattern.At(_currentPatternIndex) == input)
         {
             return Success();
         }
 
         // Success
         // Skipped the beat correctly
-        if (!input &&
+        if (input == BeatPattern.Input.Skip &&
             timeToNextBeatIdToValidateSec > validationOffset &&
-            _beatPattern.At(_currentPatternIndex) == BeatPattern.Input.SkipBeat)
+            _beatPattern.At(_currentPatternIndex) == BeatPattern.Input.Skip)
         {
             return Success();
         }
 
         // Fail
         // Either hit before or after the beat
-        if (input &&
+        if (input != BeatPattern.Input.Skip &&
             Math.Abs(timeToNextBeatIdToValidateSec) > validationOffset &&
-            _beatPattern.At(_currentPatternIndex) == BeatPattern.Input.OnBeat)
+            _beatPattern.At(_currentPatternIndex) != BeatPattern.Input.Skip)
         {
             Failure();
 
@@ -93,8 +93,8 @@ public class BeatPatternResolver
 
         // Fail
         // Hit the beat when it should have been skipped
-        if (input &&
-            _beatPattern.At(_currentPatternIndex) == BeatPattern.Input.SkipBeat)
+        if (input != BeatPattern.Input.Skip &&
+            _beatPattern.At(_currentPatternIndex) == BeatPattern.Input.Skip)
         {
             Failure();
 
@@ -103,9 +103,9 @@ public class BeatPatternResolver
 
         // Fail
         // Did not hit the beat
-        if (!input &&
+        if (input == BeatPattern.Input.Skip &&
             timeToNextBeatIdToValidateSec > validationOffset &&
-            _beatPattern.At(_currentPatternIndex) == BeatPattern.Input.OnBeat)
+            _beatPattern.At(_currentPatternIndex) != BeatPattern.Input.Skip)
         {
             Failure();
 
