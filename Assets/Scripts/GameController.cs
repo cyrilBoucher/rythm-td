@@ -8,7 +8,7 @@ public class GameController : MonoBehaviour {
     public string mapResourceName;
     public Camera mainCamera;
     public GameObject resourcesController;
-    public GameObject enemySpawnerGameObject;
+    public List<GameObject> enemySpawnerGameObjects;
     public GameObject defenseSpawnerGameObject;
     public GameObject playerBaseGameObject;
     public GameObject worldSpaceCanvas;
@@ -23,9 +23,13 @@ public class GameController : MonoBehaviour {
         {
             Map.LoadMap(mapResourceName);
 
-            enemySpawnerGameObject.GetComponent<EnemySpawner>().resourcesController = resourcesController.GetComponent<ResourcesController>();
+            foreach(GameObject enemySpawnerGameObject in enemySpawnerGameObjects)
+            {
+                enemySpawnerGameObject.GetComponent<EnemySpawner>().resourcesController = resourcesController.GetComponent<ResourcesController>();
 
-            Instantiate(enemySpawnerGameObject, Map.enemySpawnPosition, Quaternion.identity);
+                Instantiate(enemySpawnerGameObject, Map.enemySpawnPosition, Quaternion.identity);
+            }
+
             Instantiate(playerBaseGameObject, Map.basePosition, Quaternion.identity);
 
             defenseSpawnerGameObject.GetComponent<DefenseSpawner>().worldSpaceCanvasGameObject = worldSpaceCanvas;
