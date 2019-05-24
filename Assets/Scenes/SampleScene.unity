@@ -230,7 +230,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 12.725831
+  orthographic size: 7.5979385
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -555,9 +555,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mapResourceName: maptest
+  mainCamera: {fileID: 519420031}
   resourcesController: {fileID: 543766548}
-  enemySpawnerGameObject: {fileID: 7611309281656390083, guid: a6a7e252c497ef641bfa6da375c4e5d1,
-    type: 3}
+  enemySpawnerGameObjects:
+  - {fileID: 7611309281656390083, guid: a6a7e252c497ef641bfa6da375c4e5d1, type: 3}
+  - {fileID: 6692188595231350112, guid: fa6d848cac41c064e9529bfdedde728d, type: 3}
   defenseSpawnerGameObject: {fileID: 3814885585730906813, guid: e93c47d28f578c84a8ef9d4ebdfc6e30,
     type: 3}
   playerBaseGameObject: {fileID: 356142942302867094, guid: d1aca7abd8f101b4b9862d397c5cb98d,
@@ -937,7 +939,7 @@ PrefabInstance:
     - target: {fileID: 5559429562467747375, guid: a069352791c9be24c914e00ba620e531,
         type: 3}
       propertyPath: resourcesNumber
-      value: 200
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 5559429562467747374, guid: a069352791c9be24c914e00ba620e531,
         type: 3}
