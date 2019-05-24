@@ -55,10 +55,21 @@ public class BeatPatternResolver
     // This function will return an enumerator describing the success or failure.
     public ReturnType Run(float timeToNextBeatIdToValidateSec, BeatPattern.Input input)
     {
+        // TODO: Maybe find a better to do this
+        float localValidationOffset = validationOffset;
+
+        if (_beatPattern.At(_currentPatternIndex) == BeatPattern.Input.SlideDown ||
+            _beatPattern.At(_currentPatternIndex) == BeatPattern.Input.SlideUp ||
+            _beatPattern.At(_currentPatternIndex) == BeatPattern.Input.SlideLeft ||
+            _beatPattern.At(_currentPatternIndex) == BeatPattern.Input.SlideRight)
+        {
+            localValidationOffset *= 2.0f;
+        }
+
         // Success
         // Hit the beat correctly
         if (input != BeatPattern.Input.Skip &&
-            Math.Abs(timeToNextBeatIdToValidateSec) <= validationOffset &&
+            Math.Abs(timeToNextBeatIdToValidateSec) <= localValidationOffset &&
             _beatPattern.At(_currentPatternIndex) == input)
         {
             return Success();
@@ -67,7 +78,7 @@ public class BeatPatternResolver
         // Success
         // Skipped the beat correctly
         if (input == BeatPattern.Input.Skip &&
-            timeToNextBeatIdToValidateSec > validationOffset &&
+            timeToNextBeatIdToValidateSec > localValidationOffset &&
             _beatPattern.At(_currentPatternIndex) == BeatPattern.Input.Skip)
         {
             return Success();
@@ -76,7 +87,7 @@ public class BeatPatternResolver
         // Fail
         // Either hit before or after the beat
         if (input != BeatPattern.Input.Skip &&
-            Math.Abs(timeToNextBeatIdToValidateSec) > validationOffset &&
+            Math.Abs(timeToNextBeatIdToValidateSec) > localValidationOffset &&
             _beatPattern.At(_currentPatternIndex) != BeatPattern.Input.Skip)
         {
             Failure();
@@ -104,7 +115,7 @@ public class BeatPatternResolver
         // Fail
         // Did not hit the beat
         if (input == BeatPattern.Input.Skip &&
-            timeToNextBeatIdToValidateSec > validationOffset &&
+            timeToNextBeatIdToValidateSec > localValidationOffset &&
             _beatPattern.At(_currentPatternIndex) != BeatPattern.Input.Skip)
         {
             Failure();
