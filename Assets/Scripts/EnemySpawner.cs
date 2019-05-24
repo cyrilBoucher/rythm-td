@@ -22,7 +22,7 @@ public class EnemySpawner : MonoBehaviour
     {
         _spawnCooldownBeat = spawnIntervalBeat;
         _waveCooldownBeat = 0;
-        _currentBeatId = BeatEngine.BeatId();
+        _currentBeatId = -1;
     }
 
     // Update is called once per frame
@@ -33,45 +33,40 @@ public class EnemySpawner : MonoBehaviour
             return;
         }
 
-        if (_spawnedEnemies >= enemiesToSpawn)
+        if (_currentBeatId != BeatEngine.BeatId())
         {
-            if (_currentBeatId != BeatEngine.BeatId())
+            _currentBeatId = BeatEngine.BeatId();
+
+            if (_spawnedEnemies >= enemiesToSpawn)
             {
                 _waveCooldownBeat++;
 
-                _currentBeatId = BeatEngine.BeatId();
+                if (_waveCooldownBeat >= waveIntervalBeat)
+                {
+                    _spawnedEnemies = 0;
+
+                    _waveCooldownBeat = 0;
+
+                    _spawnedWaves++;
+                }
+
+                return;
             }
 
-            if (_waveCooldownBeat >= waveIntervalBeat)
+            if (_spawnCooldownBeat >= spawnIntervalBeat)
             {
-                _spawnedEnemies = 0;
+                EnemyController enemyController = enemyGameObject.GetComponent<EnemyController>();
+                enemyController.resourcesController = resourcesController;
+                Instantiate(enemyGameObject, transform.position, Quaternion.identity);
 
-                _waveCooldownBeat = 0;
+                _spawnedEnemies++;
 
-                _spawnedWaves++;
+                _spawnCooldownBeat = 0;
+
+                return;
             }
 
-            return;
-        }
-
-        if (_spawnCooldownBeat >= spawnIntervalBeat)
-        {
-            EnemyController enemyController = enemyGameObject.GetComponent<EnemyController>();
-            enemyController.resourcesController = resourcesController;
-            Instantiate(enemyGameObject, transform.position, Quaternion.identity);
-
-            _spawnedEnemies++;
-
-            _spawnCooldownBeat = 0;
-
-            return;
-        }
-
-        if (_currentBeatId != BeatEngine.BeatId())
-        {
             _spawnCooldownBeat++;
-
-            _currentBeatId = BeatEngine.BeatId();
         }
     }
 }
