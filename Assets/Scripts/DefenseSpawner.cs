@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System;
+﻿using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -37,7 +35,7 @@ public class DefenseSpawner : MonoBehaviour {
     // Update is called once per frame
     void Update () {
 
-        BeatPattern.Input input = CheckForInput();
+        BeatPattern.Input input = InputDetector.CheckForInput(GetComponent<BoxCollider2D>());
 
         BeatPatternResolver.ReturnType result = _beatPatternResolver.Run2(input);
 
@@ -50,6 +48,7 @@ public class DefenseSpawner : MonoBehaviour {
                 return;
             }
 
+            defenseController.resourcesController = resourcesController;
             Instantiate(defensePrefab, transform.position, Quaternion.identity);
             resourcesController.resourcesNumber -= defenseController.price;
 
@@ -78,25 +77,5 @@ public class DefenseSpawner : MonoBehaviour {
             textColor.a -= Math.Max(0.5f * Time.deltaTime, 0.0f);
             _inputFeedbackText.color = textColor;
         }
-    }
-
-    BeatPattern.Input CheckForInput()
-    {
-        if (Input.GetMouseButtonDown(0))
-        {
-            Vector2 worldMousPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-
-            RaycastHit2D hit = Physics2D.Raycast(worldMousPos, -Vector2.up);
-
-            if (hit.collider != null)
-            {
-                if (hit.transform.GetComponent<BoxCollider2D>() == GetComponent<BoxCollider2D>())
-                {
-                    return BeatPattern.Input.Tap;
-                }
-            }
-        }
-
-        return BeatPattern.Input.Skip;
     }
 }

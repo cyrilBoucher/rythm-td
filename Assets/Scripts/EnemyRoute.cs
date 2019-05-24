@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyRoute
@@ -38,5 +37,15 @@ public class EnemyRoute
     public void Reset()
     {
         _currentIndex = 0;
+    }
+
+    public int Length()
+    {
+        return _positions.Count;
+    }
+
+    public int CurrentPosition()
+    {
+        return _currentIndex + 1;
     }
 }

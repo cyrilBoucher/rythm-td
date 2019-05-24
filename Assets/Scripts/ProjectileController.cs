@@ -1,29 +1,29 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class ProjectileController : MonoBehaviour
 {
-    private BoxCollider2D _boundingBox;
-    private Sprite _sprite;
-    public float speedMetersPerSec;
-    public Vector3 direction;
+    private float _speedMetersPerSec;
+
+    public EnemyController enemyTarget;
     public int damage;
 
     // Start is called before the first frame update
     void Start()
     {
-        _boundingBox = GetComponent<BoxCollider2D>();
-        _sprite = GetComponent<SpriteRenderer>().sprite;
-        _boundingBox.size = _sprite.bounds.size;
+        Vector3 direction = enemyTarget.transform.position - transform.position;
+        _speedMetersPerSec = direction.magnitude / BeatEngine.RemainingTimeUntilNextBeatSec();
     }
 
     // Update is called once per frame
     void Update()
     {
+        // CHECK ME: Updating the direction each time ensures us
+        // we will hit the target but can lead to a noticeable
+        // curve in the projectile's trajectory
+        Vector3 direction = enemyTarget.transform.position - transform.position;
         direction.Normalize();
 
-        transform.position = transform.position + direction * (speedMetersPerSec * Time.deltaTime);
+        transform.position = transform.position + direction * (_speedMetersPerSec * Time.deltaTime);
     }
 
     void OnCollisionEnter2D(Collision2D other)
@@ -35,6 +35,11 @@ public class ProjectileController : MonoBehaviour
             return;
         }
 
+        if (enemy != enemyTarget)
+        {
+            return;
+        }
+
         DealDamage(enemy);
     }
 
@@ -42,6 +47,6 @@ public class ProjectileController : MonoBehaviour
     {
         enemy.TakeDamage(damage);
 
-        Destroy(this.gameObject);
+        Destroy(gameObject);
     }
 }
