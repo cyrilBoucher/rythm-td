@@ -8,12 +8,14 @@ public class EnemyController : MonoBehaviour {
     private float _smoothTime = 1.0f;
     private int _currentBeatId = 0;
     private Vector3 _velocity;
+    private int _numberOfBeatsWaiting;
 
     public ResourcesController resourcesController;
     public EnemyRoute route;
     public int life;
     public int damage;
     public int reward;
+    public int speedBeatPerUnit;
 
     // Use this for initialization
     void Start ()
@@ -46,7 +48,19 @@ public class EnemyController : MonoBehaviour {
         int beatEngineId = BeatEngine.BeatId();
         if (beatEngineId != _currentBeatId)
         {
+            _currentBeatId = beatEngineId;
+
+            if (_numberOfBeatsWaiting < (speedBeatPerUnit - 1))
+            {
+                _numberOfBeatsWaiting++;
+
+                return;
+            }
+
+            _numberOfBeatsWaiting = 0;
+
             _nextPosition = route.Next();
+
             if (_nextPosition == Vector3.zero)
             {
                 // destination reached
@@ -54,7 +68,6 @@ public class EnemyController : MonoBehaviour {
             }
 
             _smoothTime = BeatEngine.RemainingTimeUntilNextBeatSec() / 2.0f;
-            _currentBeatId = beatEngineId;
         }
 
         transform.position = Vector3.SmoothDamp(transform.position, _nextPosition, ref _velocity, _smoothTime);

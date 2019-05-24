@@ -25,12 +25,32 @@ PrefabInstance:
     - target: {fileID: 3883359029300959499, guid: 52f95dcc9d8c27144abc538edc7b13c8,
         type: 3}
       propertyPath: reward
-      value: 10
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 3883359029300959499, guid: 52f95dcc9d8c27144abc538edc7b13c8,
         type: 3}
       propertyPath: resourcesController
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3883359029300959499, guid: 52f95dcc9d8c27144abc538edc7b13c8,
+        type: 3}
+      propertyPath: _speedMetersPerBeat
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3883359029300959499, guid: 52f95dcc9d8c27144abc538edc7b13c8,
+        type: 3}
+      propertyPath: _speedUnitPerBeat
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3883359029300959499, guid: 52f95dcc9d8c27144abc538edc7b13c8,
+        type: 3}
+      propertyPath: speedUnitPerBeat
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3883359029300959499, guid: 52f95dcc9d8c27144abc538edc7b13c8,
+        type: 3}
+      propertyPath: speedBeatPerUnit
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3883359029300959498, guid: 52f95dcc9d8c27144abc538edc7b13c8,
         type: 3}
@@ -136,12 +156,12 @@ PrefabInstance:
     - target: {fileID: 3883359029300959496, guid: 52f95dcc9d8c27144abc538edc7b13c8,
         type: 3}
       propertyPath: m_Size.x
-      value: 0.8828125
+      value: 0.55776393
       objectReference: {fileID: 0}
     - target: {fileID: 3883359029300959496, guid: 52f95dcc9d8c27144abc538edc7b13c8,
         type: 3}
       propertyPath: m_Size.y
-      value: 0.5234375
+      value: 0.33070958
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 52f95dcc9d8c27144abc538edc7b13c8, type: 3}

@@ -37,6 +37,11 @@ PrefabInstance:
       propertyPath: speedUnitPerBeat
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 3883359029300959499, guid: 52f95dcc9d8c27144abc538edc7b13c8,
+        type: 3}
+      propertyPath: speedBeatPerUnit
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3883359029300959498, guid: 52f95dcc9d8c27144abc538edc7b13c8,
         type: 3}
       propertyPath: m_Sprite
