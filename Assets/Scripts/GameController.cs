@@ -12,13 +12,11 @@ public class GameController : MonoBehaviour {
     public GameObject defenseSpawnerGameObject;
     public GameObject playerBaseGameObject;
     public GameObject worldSpaceCanvas;
-    public Text beatCountText;
     public bool loadMap = true;
 
-	// Use this for initialization
-	void Start () {
-        beatCountText.text = "0";
-
+    // Use this for initialization
+    void Start ()
+    {
         if (loadMap)
         {
             Map.LoadMap(mapResourceName);
@@ -49,8 +47,7 @@ public class GameController : MonoBehaviour {
         BeatEngine.StartBeat(120);
     }
 
-	// Update is called once per frame
-	void Update () {
-        beatCountText.text = BeatEngine.BeatId().ToString();
-	}
+    // Update is called once per frame
+    void Update () {
+    }
 }

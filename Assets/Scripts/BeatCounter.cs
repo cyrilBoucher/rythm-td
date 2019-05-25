@@ -1,23 +1,26 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.UI;
 
 public class BeatCounter : MonoBehaviour
 {
-    private SpriteRenderer _spriteRenderer;
+    private Image _image;
+    private Text _text;
 
     // Start is called before the first frame update
     void Start()
     {
-        _spriteRenderer = GetComponent<SpriteRenderer>();
+        _image = GetComponent<Image>();
+        _text = GetComponentInChildren<Text>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        Color spriteColor = _spriteRenderer.color;
+        Color spriteColor = _image.color;
         spriteColor.a = BeatEngine.RemainingTimeUntilNextBeatSec() / BeatEngine.SecondsPerBeat();
 
-        _spriteRenderer.color = spriteColor;
+        _image.color = spriteColor;
+
+        _text.text = BeatEngine.BeatId().ToString();
     }
 }
