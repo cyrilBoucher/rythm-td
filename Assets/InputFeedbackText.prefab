@@ -11,8 +11,9 @@ GameObject:
   - component: {fileID: 839987091544893908}
   - component: {fileID: 766325585040487018}
   - component: {fileID: 8943446487860079532}
+  - component: {fileID: 3936755322280749951}
   m_Layer: 5
-  m_Name: SuccessText
+  m_Name: InputFeedbackText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -79,3 +80,16 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: New Text
+--- !u!114 &3936755322280749951
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 302928808805573940}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 470521886ffec7448a4d1f9f7ad9dfa0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  text: {fileID: 0}

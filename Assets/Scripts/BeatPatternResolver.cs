@@ -150,7 +150,7 @@ public class BeatPatternResolver
         _currentPatternIndex = 0;
     }
 
-    public String EnumToString(ReturnType returnType)
+    public static String EnumToString(ReturnType returnType)
     {
         switch(returnType)
         {
