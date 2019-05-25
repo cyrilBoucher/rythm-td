@@ -41,7 +41,7 @@ public class GameController : MonoBehaviour {
             // -10 is used as z to see elements usually positioned at z = 0
             // add 1 to orthographic size to that the top and bottom of map show inside view
             mainCamera.transform.position = new Vector3(Map.mapDimensions.x / 2.0f, Map.mapDimensions.y / 2.0f, -10.0f);
-            mainCamera.orthographicSize = Map.mapDimensions.y / 2.0f + 1.0f;
+            mainCamera.orthographicSize = ((Map.mapDimensions.x + 1.0f) / mainCamera.aspect) / 2.0f;
         }
 
         BeatEngine.StartBeat(120);
