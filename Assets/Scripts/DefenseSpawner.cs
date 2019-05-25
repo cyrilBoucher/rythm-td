@@ -43,6 +43,7 @@ public class DefenseSpawner : MonoBehaviour {
             }
 
             defenseController.resourcesController = resourcesController;
+            defenseController.worldSpaceCanvasGameObject = worldSpaceCanvasGameObject;
             Instantiate(defensePrefab, transform.position, Quaternion.identity);
             resourcesController.resourcesNumber -= defenseController.price;
 

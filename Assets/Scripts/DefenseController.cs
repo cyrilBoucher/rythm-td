@@ -7,6 +7,8 @@ public class DefenseController : MonoBehaviour
     public GameObject projectileGameObject;
     public GameObject upgradedDefensePrefab;
     public GameObject downgradedDefensePrefab;
+    public GameObject inputFeedbackTextPrefab;
+    public GameObject worldSpaceCanvasGameObject;
     public int projectilePower;
     public int attackCooldownBeat;
     public int price;
@@ -16,6 +18,7 @@ public class DefenseController : MonoBehaviour
     private int _cooldownCounterBeat;
     private int _currentBeatId;
     private List<EnemyController> _enemiesInRange = new List<EnemyController>();
+    private InputFeedbackTextController _inputFeedbackTextController;
 
     // Start is called before the first frame update
     void Start()
@@ -43,6 +46,13 @@ public class DefenseController : MonoBehaviour
         beatPattern.Add(BeatPattern.Input.SlideDown);
 
         _downgradeBeatPatternResolver.SetPattern(beatPattern);
+
+        GameObject inputFeedbackTextGameObjectInstance = Instantiate(inputFeedbackTextPrefab,
+            transform.position + new Vector3(0.0f,1.0f, 0.0f),
+            Quaternion.identity,
+            worldSpaceCanvasGameObject.transform);
+
+        _inputFeedbackTextController = inputFeedbackTextGameObjectInstance.GetComponent<InputFeedbackTextController>();
     }
 
     // Update is called once per frame
@@ -68,15 +78,27 @@ public class DefenseController : MonoBehaviour
                 DefenseController upgradedDefenseController = upgradedDefensePrefab.GetComponent<DefenseController>();
                 if (resourcesController.resourcesNumber >= upgradedDefenseController.price)
                 {
-                    Debug.Log("UPGRADE");
-
                     resourcesController.resourcesNumber -= upgradedDefenseController.price;
 
+                    upgradedDefenseController.resourcesController = resourcesController;
+                    upgradedDefenseController.worldSpaceCanvasGameObject = worldSpaceCanvasGameObject;
                     Instantiate(upgradedDefensePrefab, transform.position, Quaternion.identity);
 
                     Destroy(gameObject);
+
+                    _inputFeedbackTextController.ShowFeedback("Upgrade!");
+                }
+                else
+                {
+                    _inputFeedbackTextController.ShowFeedback("Not enough resources!");
                 }
             }
+            else
+            {
+                _inputFeedbackTextController.ShowFeedback("Max level reached!");
+            }
+
+            return;
         }
 
         result = _downgradeBeatPatternResolver.Run2(input);
@@ -87,14 +109,27 @@ public class DefenseController : MonoBehaviour
             {
                 DefenseController downgradedDefenseController = downgradedDefensePrefab.GetComponent<DefenseController>();
 
-                Debug.Log("DOWNGRADE");
-
                 resourcesController.resourcesNumber += downgradedDefenseController.price;
 
+                downgradedDefenseController.resourcesController = resourcesController;
+                downgradedDefenseController.worldSpaceCanvasGameObject = worldSpaceCanvasGameObject;
                 Instantiate(downgradedDefenseController, transform.position, Quaternion.identity);
 
                 Destroy(gameObject);
+
+                _inputFeedbackTextController.ShowFeedback("Downgrade!");
             }
+            else
+            {
+                _inputFeedbackTextController.ShowFeedback("Min level reached!");
+            }
+
+            return;
+        }
+
+        if (result != BeatPatternResolver.ReturnType.Waiting)
+        {
+            _inputFeedbackTextController.ShowFeedback(BeatPatternResolver.EnumToString(result));
         }
     }
 

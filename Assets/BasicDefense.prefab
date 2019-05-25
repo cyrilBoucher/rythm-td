@@ -124,5 +124,56 @@ PrefabInstance:
       propertyPath: projectilePower
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 1044226741493193043, guid: f5f31c11e811ba74eaee1192b44a78ab,
+        type: 3}
+      propertyPath: upgradedDefensePrefab
+      value: 
+      objectReference: {fileID: 6874142547815271461, guid: 8d39316a6a3947a4da2ad7ae8993c9c3,
+        type: 3}
+    - target: {fileID: 280153241391243216, guid: f5f31c11e811ba74eaee1192b44a78ab,
+        type: 3}
+      propertyPath: m_SpriteTilingProperty.pivot.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 280153241391243216, guid: f5f31c11e811ba74eaee1192b44a78ab,
+        type: 3}
+      propertyPath: m_SpriteTilingProperty.pivot.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 280153241391243216, guid: f5f31c11e811ba74eaee1192b44a78ab,
+        type: 3}
+      propertyPath: m_SpriteTilingProperty.oldSize.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 280153241391243216, guid: f5f31c11e811ba74eaee1192b44a78ab,
+        type: 3}
+      propertyPath: m_SpriteTilingProperty.oldSize.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 280153241391243216, guid: f5f31c11e811ba74eaee1192b44a78ab,
+        type: 3}
+      propertyPath: m_SpriteTilingProperty.newSize.x
+      value: 5.12
+      objectReference: {fileID: 0}
+    - target: {fileID: 280153241391243216, guid: f5f31c11e811ba74eaee1192b44a78ab,
+        type: 3}
+      propertyPath: m_SpriteTilingProperty.newSize.y
+      value: 5.12
+      objectReference: {fileID: 0}
+    - target: {fileID: 280153241391243216, guid: f5f31c11e811ba74eaee1192b44a78ab,
+        type: 3}
+      propertyPath: m_SpriteTilingProperty.adaptiveTilingThreshold
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 280153241391243216, guid: f5f31c11e811ba74eaee1192b44a78ab,
+        type: 3}
+      propertyPath: m_Size.x
+      value: 1.0086284
+      objectReference: {fileID: 0}
+    - target: {fileID: 280153241391243216, guid: f5f31c11e811ba74eaee1192b44a78ab,
+        type: 3}
+      propertyPath: m_Size.y
+      value: 1.0086284
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f5f31c11e811ba74eaee1192b44a78ab, type: 3}
