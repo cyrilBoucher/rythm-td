@@ -5,6 +5,8 @@ public class DefenseController : MonoBehaviour
 {
     public ResourcesController resourcesController;
     public GameObject projectileGameObject;
+    public GameObject upgradedDefensePrefab;
+    public GameObject downgradedDefensePrefab;
     public int projectilePower;
     public int attackCooldownBeat;
     public int price;
@@ -14,12 +16,21 @@ public class DefenseController : MonoBehaviour
     private int _cooldownCounterBeat;
     private int _currentBeatId;
     private List<EnemyController> _enemiesInRange = new List<EnemyController>();
-    private int _level;
 
     // Start is called before the first frame update
     void Start()
     {
         _cooldownCounterBeat = attackCooldownBeat;
+
+        if (upgradedDefensePrefab != null)
+        {
+            upgradedDefensePrefab.GetComponent<DefenseController>().resourcesController = resourcesController;
+        }
+
+        if (downgradedDefensePrefab != null)
+        {
+            downgradedDefensePrefab.GetComponent<DefenseController>().resourcesController = resourcesController;
+        }
 
         BeatPattern beatPattern = new BeatPattern();
         beatPattern.Add(BeatPattern.Input.Tap);
@@ -52,14 +63,19 @@ public class DefenseController : MonoBehaviour
 
         if (result == BeatPatternResolver.ReturnType.Validated)
         {
-            // TODO: make this a variable
-            if (resourcesController.resourcesNumber >= 5)
+            if (upgradedDefensePrefab != null)
             {
-                Debug.Log("UPGRADE");
+                DefenseController upgradedDefenseController = upgradedDefensePrefab.GetComponent<DefenseController>();
+                if (resourcesController.resourcesNumber >= upgradedDefenseController.price)
+                {
+                    Debug.Log("UPGRADE");
 
-                projectilePower += 2;
-                _level++;
-                resourcesController.resourcesNumber -= 5;
+                    resourcesController.resourcesNumber -= upgradedDefenseController.price;
+
+                    Instantiate(upgradedDefensePrefab, transform.position, Quaternion.identity);
+
+                    Destroy(gameObject);
+                }
             }
         }
 
@@ -67,12 +83,17 @@ public class DefenseController : MonoBehaviour
 
         if (result == BeatPatternResolver.ReturnType.Validated)
         {
-            if (_level != 0)
+            if (downgradedDefensePrefab != null)
             {
+                DefenseController downgradedDefenseController = downgradedDefensePrefab.GetComponent<DefenseController>();
+
                 Debug.Log("DOWNGRADE");
 
-                projectilePower -= 2;
-                _level--;
+                resourcesController.resourcesNumber += downgradedDefenseController.price;
+
+                Instantiate(downgradedDefenseController, transform.position, Quaternion.identity);
+
+                Destroy(gameObject);
             }
         }
     }
