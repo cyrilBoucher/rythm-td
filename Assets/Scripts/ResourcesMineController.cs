@@ -5,6 +5,7 @@ public class ResourcesMineController : MonoBehaviour
     public ResourcesController resourcesController;    
     public GameObject inputFeedbackTextPrefab;
     public GameObject worldSpaceCanvasGameObject;
+    public int resourcesNumber;
 
     private BeatPatternResolver _beatPatternResolver;
     private InputFeedbackTextController _inputFeedbackTextController;
@@ -36,7 +37,15 @@ public class ResourcesMineController : MonoBehaviour
 
         if (result == BeatPatternResolver.ReturnType.Validated)
         {
-            resourcesController.resourcesNumber += 1;
+            if (resourcesNumber == 0)
+            {
+                _inputFeedbackTextController.ShowFeedback("Empty!");
+
+                return;
+            }
+
+            resourcesController.resourcesNumber++;
+            resourcesNumber--;
 
             _inputFeedbackTextController.ShowFeedback(BeatPatternResolver.EnumToString(BeatPatternResolver.ReturnType.Good));
 

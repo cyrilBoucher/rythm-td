@@ -97,6 +97,7 @@ MonoBehaviour:
   inputFeedbackTextPrefab: {fileID: 302928808805573940, guid: afa3575a47468ea48bccc282af401c37,
     type: 3}
   worldSpaceCanvasGameObject: {fileID: 0}
+  resourcesNumber: 20
 --- !u!61 &6303138648170761616
 BoxCollider2D:
   m_ObjectHideFlags: 0
