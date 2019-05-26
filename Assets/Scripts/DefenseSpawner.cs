@@ -1,10 +1,9 @@
-﻿using System;
-using UnityEngine;
-using UnityEngine.UI;
+﻿using UnityEngine;
 
 public class DefenseSpawner : MonoBehaviour {
 
     private GameObject _inputFeedbackTextGameObjectInstance;
+    private InputFeedbackTextController _inputFeedbackTextController;
     private BeatPattern _beatPattern = new BeatPattern();
     private BeatPatternResolver _beatPatternResolver = new BeatPatternResolver();
 
@@ -24,6 +23,8 @@ public class DefenseSpawner : MonoBehaviour {
             transform.position + new Vector3(0.0f, 0.5f, 0.0f),
             Quaternion.identity,
             worldSpaceCanvasGameObject.transform);
+
+        _inputFeedbackTextController = _inputFeedbackTextGameObjectInstance.GetComponent<InputFeedbackTextController>();
     }
 
     // Update is called once per frame
@@ -39,6 +40,8 @@ public class DefenseSpawner : MonoBehaviour {
 
             if (resourcesController.resourcesNumber < defenseController.price)
             {
+                _inputFeedbackTextController.ShowFeedback("Not enough resources!");
+
                 return;
             }
 
@@ -49,7 +52,7 @@ public class DefenseSpawner : MonoBehaviour {
 
             Destroy(gameObject);
 
-            // TODO: Avoid doing that
+            // CHECK ME: Maybe avoid doing that?
             Destroy(_inputFeedbackTextGameObjectInstance);
 
             return;
@@ -57,8 +60,7 @@ public class DefenseSpawner : MonoBehaviour {
 
         if (result != BeatPatternResolver.ReturnType.Waiting)
         {
-            InputFeedbackTextController controller = _inputFeedbackTextGameObjectInstance.GetComponent<InputFeedbackTextController>();
-            controller.ShowFeedback(BeatPatternResolver.EnumToString(result));
+            _inputFeedbackTextController.ShowFeedback(BeatPatternResolver.EnumToString(result));
 
             return;
         }
