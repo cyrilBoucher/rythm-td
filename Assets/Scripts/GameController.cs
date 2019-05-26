@@ -1,7 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class GameController : MonoBehaviour {
 
@@ -11,6 +9,7 @@ public class GameController : MonoBehaviour {
     public List<GameObject> enemySpawnerGameObjects;
     public GameObject defenseSpawnerGameObject;
     public GameObject playerBaseGameObject;
+    public GameObject resourcesMinePrefab;
     public GameObject worldSpaceCanvas;
     public bool loadMap = true;
 
@@ -35,6 +34,13 @@ public class GameController : MonoBehaviour {
             foreach (Vector3 defenseSpawnerPosition in Map.defenseSpawnPositions)
             {
                 Instantiate(defenseSpawnerGameObject, defenseSpawnerPosition, Quaternion.identity);
+            }
+
+            foreach (Vector3 resourcesMinePosition in Map.resourcesMinePositions)
+            {
+                resourcesMinePrefab.GetComponent<ResourcesMineController>().resourcesController = resourcesController.GetComponent<ResourcesController>();
+                resourcesMinePrefab.GetComponent<ResourcesMineController>().worldSpaceCanvasGameObject = worldSpaceCanvas;
+                Instantiate(resourcesMinePrefab, resourcesMinePosition, Quaternion.identity);
             }
 
             // Make sure we see all the map

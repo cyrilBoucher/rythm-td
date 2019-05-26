@@ -10,6 +10,7 @@ public class Map
     public static Vector3 enemySpawnPosition;
     public static Vector3 basePosition;
     public static List<Vector3> defenseSpawnPositions;
+    public static List<Vector3> resourcesMinePositions;
     public static Vector2 mapDimensions;
     private static string _mapResourceName;
     private const string WrongMapFormatErrorMessage = "Wrong format used in {0}";
@@ -47,6 +48,11 @@ public class Map
         }
 
         if (!DeserializeDefenseSpawnPositions(parsed))
+        {
+            return false;
+        }
+
+        if (!DeserializeResourcesMinePositions(parsed))
         {
             return false;
         }
@@ -145,6 +151,27 @@ public class Map
             }
 
             defenseSpawnPositions.Add(new Vector3(deserializedEnemyRoutePositionVector2[0], deserializedEnemyRoutePositionVector2[1], 0.0f));
+        }
+
+        return true;
+    }
+
+    static private bool DeserializeResourcesMinePositions(Dictionary<String, List<int[]>> deserializedMapData)
+    {
+        List<int[]> deserializedResourcesMinePositions = deserializedMapData["resourcesMine"];
+
+        resourcesMinePositions = new List<Vector3>();
+
+        foreach (int[] deserializedResourcesMinePositionVector2 in deserializedResourcesMinePositions)
+        {
+            if (deserializedResourcesMinePositionVector2.Length != 2)
+            {
+                Debug.LogError(String.Format(WrongMapFormatErrorMessage, _mapResourceName));
+
+                return false;
+            }
+
+            resourcesMinePositions.Add(new Vector3(deserializedResourcesMinePositionVector2[0], deserializedResourcesMinePositionVector2[1], 0.0f));
         }
 
         return true;
