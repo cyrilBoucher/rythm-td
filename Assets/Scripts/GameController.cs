@@ -49,8 +49,6 @@ public class GameController : MonoBehaviour {
             mainCamera.transform.position = new Vector3(Map.mapDimensions.x / 2.0f, Map.mapDimensions.y / 2.0f, -10.0f);
             mainCamera.orthographicSize = ((Map.mapDimensions.x + 1.0f) / mainCamera.aspect) / 2.0f;
         }
-
-        BeatEngine.StartBeat(120);
     }
 
     // Update is called once per frame

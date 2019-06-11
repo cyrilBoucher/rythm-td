@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class DefenseController : MonoBehaviour
+public class DefenseController : MonoBehaviour, IBeatActor
 {
     public ResourcesController resourcesController;
     public GameObject projectileGameObject;
@@ -53,20 +53,13 @@ public class DefenseController : MonoBehaviour
             worldSpaceCanvasGameObject.transform);
 
         _inputFeedbackTextController = inputFeedbackTextGameObjectInstance.GetComponent<InputFeedbackTextController>();
+
+        BeatEngine.BeatEvent += OnBeat;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (_currentBeatId != BeatEngine.BeatId())
-        {
-            _currentBeatId = BeatEngine.BeatId();
-
-            _cooldownCounterBeat++;
-
-            FireIfCooledDown();
-        }
-
         BeatPattern.Input input = InputDetector.CheckForInput(GetComponent<BoxCollider2D>());
 
         BeatPatternResolver.ReturnType result = _upgradeBeatPatternResolver.Run2(input);
@@ -200,5 +193,17 @@ public class DefenseController : MonoBehaviour
         projectileController.enemyTarget = enemy;
 
         Instantiate(projectileGameObject, transform.position, Quaternion.identity);
+    }
+
+    public void OnBeat()
+    {
+        _cooldownCounterBeat++;
+
+        FireIfCooledDown();
+    }
+
+    void OnDestroy()
+    {
+        BeatEngine.BeatEvent += OnBeat;
     }
 }

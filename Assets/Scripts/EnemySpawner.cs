@@ -1,8 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class EnemySpawner : MonoBehaviour
+public class EnemySpawner : MonoBehaviour, IBeatActor
 {
     public ResourcesController resourcesController;
     public GameObject enemyGameObject;
@@ -15,58 +13,62 @@ public class EnemySpawner : MonoBehaviour
     private int _spawnedEnemies = 0;
     private int _waveCooldownBeat;
     private int _spawnedWaves = 0;
-    private int _currentBeatId;
 
     // Start is called before the first frame update
     void Start()
     {
         _spawnCooldownBeat = spawnIntervalBeat;
         _waveCooldownBeat = 0;
-        _currentBeatId = -1;
+
+        BeatEngine.BeatEvent += OnBeat;
     }
 
     // Update is called once per frame
     void Update()
+    {
+    }
+
+    public void OnBeat()
     {
         if (_spawnedWaves >= enemyWaves)
         {
             return;
         }
 
-        if (_currentBeatId != BeatEngine.BeatId())
+        if (_spawnedEnemies >= enemiesToSpawn)
         {
-            _currentBeatId = BeatEngine.BeatId();
+            _waveCooldownBeat++;
 
-            if (_spawnedEnemies >= enemiesToSpawn)
+            if (_waveCooldownBeat >= waveIntervalBeat)
             {
-                _waveCooldownBeat++;
+                _spawnedEnemies = 0;
 
-                if (_waveCooldownBeat >= waveIntervalBeat)
-                {
-                    _spawnedEnemies = 0;
+                _waveCooldownBeat = 0;
 
-                    _waveCooldownBeat = 0;
-
-                    _spawnedWaves++;
-                }
-
-                return;
+                _spawnedWaves++;
             }
 
-            if (_spawnCooldownBeat >= spawnIntervalBeat)
-            {
-                EnemyController enemyController = enemyGameObject.GetComponent<EnemyController>();
-                enemyController.resourcesController = resourcesController;
-                Instantiate(enemyGameObject, transform.position, Quaternion.identity);
-
-                _spawnedEnemies++;
-
-                _spawnCooldownBeat = 0;
-
-                return;
-            }
-
-            _spawnCooldownBeat++;
+            return;
         }
+
+        _spawnCooldownBeat++;
+
+        if (_spawnCooldownBeat >= spawnIntervalBeat)
+        {
+            EnemyController enemyController = enemyGameObject.GetComponent<EnemyController>();
+            enemyController.resourcesController = resourcesController;
+            Instantiate(enemyGameObject, transform.position, Quaternion.identity);
+
+            _spawnedEnemies++;
+
+            _spawnCooldownBeat = 0;
+
+            return;
+        }
+    }
+
+    void OnDestroy()
+    {
+        BeatEngine.BeatEvent -= OnBeat;
     }
 }

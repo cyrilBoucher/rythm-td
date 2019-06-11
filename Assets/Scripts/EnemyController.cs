@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyController : MonoBehaviour {
+public class EnemyController : MonoBehaviour, IBeatActor
+{
 
     private Vector3 _nextPosition;
     private float _smoothTime = 1.0f;
-    private int _currentBeatId = 0;
     private Vector3 _velocity;
     private int _numberOfBeatsWaiting;
 
@@ -32,9 +32,11 @@ public class EnemyController : MonoBehaviour {
 
         transform.position = route.Next();
 
-        _nextPosition = route.Next();
-        _smoothTime = BeatEngine.RemainingTimeUntilNextBeatSec() / 2.0f;
-        _currentBeatId = BeatEngine.BeatId();
+        _nextPosition = Vector3.zero;
+
+        _numberOfBeatsWaiting = speedBeatPerUnit;
+
+        BeatEngine.BeatEvent += OnBeat;
     }
 
 	// Update is called once per frame
@@ -45,29 +47,9 @@ public class EnemyController : MonoBehaviour {
             return;
         }
 
-        int beatEngineId = BeatEngine.BeatId();
-        if (beatEngineId != _currentBeatId)
+        if (_nextPosition == Vector3.zero)
         {
-            _currentBeatId = beatEngineId;
-
-            if (_numberOfBeatsWaiting < (speedBeatPerUnit - 1))
-            {
-                _numberOfBeatsWaiting++;
-
-                return;
-            }
-
-            _numberOfBeatsWaiting = 0;
-
-            _nextPosition = route.Next();
-
-            if (_nextPosition == Vector3.zero)
-            {
-                // destination reached
-                return;
-            }
-
-            _smoothTime = BeatEngine.RemainingTimeUntilNextBeatSec() / 2.0f;
+            return;
         }
 
         transform.position = Vector3.SmoothDamp(transform.position, _nextPosition, ref _velocity, _smoothTime);
@@ -102,5 +84,37 @@ public class EnemyController : MonoBehaviour {
 
             Destroy(this.gameObject);
         }
+    }
+
+    public void OnBeat()
+    {
+        if (route == null)
+        {
+            return;
+        }
+
+        if (_numberOfBeatsWaiting < (speedBeatPerUnit - 1))
+        {
+            _numberOfBeatsWaiting++;
+
+            return;
+        }
+
+        _numberOfBeatsWaiting = 0;
+
+        _nextPosition = route.Next();
+
+        if (_nextPosition == Vector3.zero)
+        {
+            // destination reached
+            return;
+        }
+
+        _smoothTime = (float)(BeatEngine.instance.RemainingTimeUntilNextBeatSec() / 2.0);
+    }
+
+    void OnDestroy()
+    {
+        BeatEngine.BeatEvent -= OnBeat;
     }
 }

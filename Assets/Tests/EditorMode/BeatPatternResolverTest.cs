@@ -27,7 +27,7 @@ namespace Tests
 
             resolver.SetPattern(pattern);
 
-            float timeToClosestBeatSec = resolver.validationOffset / 2.0f;
+            double timeToClosestBeatSec = resolver.validationOffset / 2.0f;
             BeatPatternResolver.ReturnType result = resolver.Run(timeToClosestBeatSec, patternElement1);
 
             Assert.AreEqual(BeatPatternResolver.ReturnType.Good, result);
@@ -48,7 +48,7 @@ namespace Tests
 
             resolver.SetPattern(pattern);
 
-            float timeToClosestBeatSec = resolver.validationOffset / 2.0f;
+            double timeToClosestBeatSec = resolver.validationOffset / 2.0f;
             BeatPatternResolver.ReturnType result = resolver.Run(timeToClosestBeatSec, patternElement1);
 
             Assert.AreEqual(BeatPatternResolver.ReturnType.Good, result);
@@ -76,7 +76,7 @@ namespace Tests
 
             resolver.SetPattern(pattern);
 
-            float timeToClosestBeatSec = resolver.validationOffset / 2.0f;
+            double timeToClosestBeatSec = resolver.validationOffset / 2.0f;
             BeatPatternResolver.ReturnType result = resolver.Run(timeToClosestBeatSec, patternElement1);
 
             Assert.AreEqual(BeatPatternResolver.ReturnType.Good, result);
@@ -107,7 +107,7 @@ namespace Tests
 
             resolver.SetPattern(pattern);
 
-            float timeToClosestBeatSec = resolver.validationOffset / 2.0f;
+            double timeToClosestBeatSec = resolver.validationOffset / 2.0f;
             BeatPatternResolver.ReturnType result = resolver.Run(timeToClosestBeatSec, patternElement1);
 
             Assert.AreEqual(BeatPatternResolver.ReturnType.Good, result);
@@ -133,7 +133,7 @@ namespace Tests
 
             resolver.SetPattern(pattern);
 
-            float timeToClosestBeatSec = resolver.validationOffset / 2.0f;
+            double timeToClosestBeatSec = resolver.validationOffset / 2.0f;
             BeatPatternResolver.ReturnType result = resolver.Run(timeToClosestBeatSec, patternElement1);
 
             Assert.AreEqual(BeatPatternResolver.ReturnType.Good, result);
@@ -163,7 +163,7 @@ namespace Tests
 
             resolver.SetPattern(pattern);
 
-            float timeToClosestBeatSec = resolver.validationOffset / 2.0f;
+            double timeToClosestBeatSec = resolver.validationOffset / 2.0f;
             BeatPatternResolver.ReturnType result = resolver.Run(timeToClosestBeatSec, patternElement1);
 
             Assert.AreEqual(BeatPatternResolver.ReturnType.Good, result);
@@ -193,7 +193,7 @@ namespace Tests
 
             resolver.SetPattern(pattern);
 
-            float timeToClosestBeatSec = resolver.validationOffset / 2.0f;
+            double timeToClosestBeatSec = resolver.validationOffset / 2.0f;
             BeatPatternResolver.ReturnType result = resolver.Run(timeToClosestBeatSec, patternElement1);
 
             Assert.AreEqual(BeatPatternResolver.ReturnType.Good, result);

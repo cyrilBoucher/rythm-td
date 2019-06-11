@@ -29,8 +29,8 @@ public class BeatPatternResolver
     {
         if (_currentPatternIndex == 0)
         {
-            _beatIdToValidate = BeatEngine.ClosestBeatId();
-            ReturnType result = Run(BeatEngine.TimeToClosestBeatSec(), input);
+            _beatIdToValidate = BeatEngine.instance.ClosestBeatId();
+            ReturnType result = Run(BeatEngine.instance.TimeToClosestBeatSec(), input);
 
             // In this particular case missed means we have not started the
             // pattern
@@ -45,7 +45,7 @@ public class BeatPatternResolver
         }
         else
         {
-            return Run(BeatEngine.TimeToBeatIdSec(_beatIdToValidate), input);
+            return Run(BeatEngine.instance.TimeToBeatIdSec(_beatIdToValidate), input);
         }
     }
 
@@ -53,7 +53,7 @@ public class BeatPatternResolver
     // to start validating the current beat pattern. It is the responsibility
     // of the caller to call it enough times to validate the whole pattern.
     // This function will return an enumerator describing the success or failure.
-    public ReturnType Run(float timeToNextBeatIdToValidateSec, BeatPattern.Input input)
+    public ReturnType Run(double timeToNextBeatIdToValidateSec, BeatPattern.Input input)
     {
         // TODO: Maybe find a better to do this
         float localValidationOffset = validationOffset;
