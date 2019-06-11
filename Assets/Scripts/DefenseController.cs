@@ -28,11 +28,13 @@ public class DefenseController : MonoBehaviour, IBeatActor
         if (upgradedDefensePrefab != null)
         {
             upgradedDefensePrefab.GetComponent<DefenseController>().resourcesController = resourcesController;
+            upgradedDefensePrefab.GetComponent<DefenseController>().worldSpaceCanvasGameObject = worldSpaceCanvasGameObject;
         }
 
         if (downgradedDefensePrefab != null)
         {
             downgradedDefensePrefab.GetComponent<DefenseController>().resourcesController = resourcesController;
+            downgradedDefensePrefab.GetComponent<DefenseController>().worldSpaceCanvasGameObject = worldSpaceCanvasGameObject;
         }
 
         BeatPattern beatPattern = new BeatPattern();
@@ -73,8 +75,6 @@ public class DefenseController : MonoBehaviour, IBeatActor
                 {
                     resourcesController.resourcesNumber -= upgradedDefenseController.price;
 
-                    upgradedDefenseController.resourcesController = resourcesController;
-                    upgradedDefenseController.worldSpaceCanvasGameObject = worldSpaceCanvasGameObject;
                     Instantiate(upgradedDefensePrefab, transform.position, Quaternion.identity);
 
                     Destroy(gameObject);
@@ -104,8 +104,6 @@ public class DefenseController : MonoBehaviour, IBeatActor
 
                 resourcesController.resourcesNumber += downgradedDefenseController.price;
 
-                downgradedDefenseController.resourcesController = resourcesController;
-                downgradedDefenseController.worldSpaceCanvasGameObject = worldSpaceCanvasGameObject;
                 Instantiate(downgradedDefenseController, transform.position, Quaternion.identity);
 
                 Destroy(gameObject);
