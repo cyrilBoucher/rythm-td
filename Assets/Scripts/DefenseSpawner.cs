@@ -8,7 +8,6 @@ public class DefenseSpawner : MonoBehaviour {
     private BeatPatternResolver _beatPatternResolver = new BeatPatternResolver();
 
     public ResourcesController resourcesController;
-    public GameObject worldSpaceCanvasGameObject;
     public GameObject inputFeedbackTextPrefab;
     public GameObject defensePrefab;
 
@@ -22,7 +21,7 @@ public class DefenseSpawner : MonoBehaviour {
         _inputFeedbackTextGameObjectInstance = Instantiate(inputFeedbackTextPrefab,
             transform.position + new Vector3(0.0f, 0.5f, 0.0f),
             Quaternion.identity,
-            worldSpaceCanvasGameObject.transform);
+            GameController.worldSpaceCanvasInstance.transform);
 
         _inputFeedbackTextController = _inputFeedbackTextGameObjectInstance.GetComponent<InputFeedbackTextController>();
     }
@@ -46,7 +45,6 @@ public class DefenseSpawner : MonoBehaviour {
             }
 
             defenseController.resourcesController = resourcesController;
-            defenseController.worldSpaceCanvasGameObject = worldSpaceCanvasGameObject;
             Instantiate(defensePrefab, transform.position, Quaternion.identity);
             resourcesController.resourcesNumber -= defenseController.price;
 

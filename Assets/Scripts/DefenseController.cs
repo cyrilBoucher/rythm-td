@@ -8,7 +8,6 @@ public class DefenseController : MonoBehaviour, IBeatActor
     public GameObject upgradedDefensePrefab;
     public GameObject downgradedDefensePrefab;
     public GameObject inputFeedbackTextPrefab;
-    public GameObject worldSpaceCanvasGameObject;
     public int projectilePower;
     public int attackCooldownBeat;
     public int price;
@@ -28,13 +27,11 @@ public class DefenseController : MonoBehaviour, IBeatActor
         if (upgradedDefensePrefab != null)
         {
             upgradedDefensePrefab.GetComponent<DefenseController>().resourcesController = resourcesController;
-            upgradedDefensePrefab.GetComponent<DefenseController>().worldSpaceCanvasGameObject = worldSpaceCanvasGameObject;
         }
 
         if (downgradedDefensePrefab != null)
         {
             downgradedDefensePrefab.GetComponent<DefenseController>().resourcesController = resourcesController;
-            downgradedDefensePrefab.GetComponent<DefenseController>().worldSpaceCanvasGameObject = worldSpaceCanvasGameObject;
         }
 
         BeatPattern beatPattern = new BeatPattern();
@@ -52,7 +49,7 @@ public class DefenseController : MonoBehaviour, IBeatActor
         GameObject inputFeedbackTextGameObjectInstance = Instantiate(inputFeedbackTextPrefab,
             transform.position + new Vector3(0.0f,1.0f, 0.0f),
             Quaternion.identity,
-            worldSpaceCanvasGameObject.transform);
+            GameController.worldSpaceCanvasInstance.transform);
 
         _inputFeedbackTextController = inputFeedbackTextGameObjectInstance.GetComponent<InputFeedbackTextController>();
 

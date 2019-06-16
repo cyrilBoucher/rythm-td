@@ -10,16 +10,32 @@ public class GameController : MonoBehaviour {
     public GameObject defenseSpawnerGameObject;
     public GameObject playerBaseGameObject;
     public GameObject resourcesMinePrefab;
-    public GameObject worldSpaceCanvas;
+    public GameObject worldSpaceCanvasPrefab;
     public bool loadMap = true;
+    static public GameObject worldSpaceCanvasInstance;
+
+    void Awake()
+    {
+        if (loadMap)
+        {
+            Map.LoadMap(mapResourceName);
+
+            // Make sure we see all the map
+            // -10 is used as z to see elements usually positioned at z = 0
+            // add 1 to orthographic size to that the top and bottom of map show inside view
+            mainCamera.transform.position = new Vector3(Map.mapDimensions.x / 2.0f, Map.mapDimensions.y / 2.0f, -10.0f);
+            mainCamera.orthographicSize = ((Map.mapDimensions.x + 1.0f) / mainCamera.aspect) / 2.0f;
+        }
+
+        worldSpaceCanvasPrefab.GetComponent<Canvas>().worldCamera = mainCamera;
+        worldSpaceCanvasInstance = Instantiate(worldSpaceCanvasPrefab, mainCamera.transform.position, Quaternion.identity);
+    }
 
     // Use this for initialization
     void Start ()
     {
         if (loadMap)
         {
-            Map.LoadMap(mapResourceName);
-
             foreach(GameObject enemySpawnerGameObject in enemySpawnerGameObjects)
             {
                 enemySpawnerGameObject.GetComponent<EnemySpawner>().resourcesController = resourcesController.GetComponent<ResourcesController>();
@@ -29,7 +45,6 @@ public class GameController : MonoBehaviour {
 
             Instantiate(playerBaseGameObject, Map.basePosition, Quaternion.identity);
 
-            defenseSpawnerGameObject.GetComponent<DefenseSpawner>().worldSpaceCanvasGameObject = worldSpaceCanvas;
             defenseSpawnerGameObject.GetComponent<DefenseSpawner>().resourcesController = resourcesController.GetComponent<ResourcesController>();
             foreach (Vector3 defenseSpawnerPosition in Map.defenseSpawnPositions)
             {
@@ -39,15 +54,8 @@ public class GameController : MonoBehaviour {
             foreach (Vector3 resourcesMinePosition in Map.resourcesMinePositions)
             {
                 resourcesMinePrefab.GetComponent<ResourcesMineController>().resourcesController = resourcesController.GetComponent<ResourcesController>();
-                resourcesMinePrefab.GetComponent<ResourcesMineController>().worldSpaceCanvasGameObject = worldSpaceCanvas;
                 Instantiate(resourcesMinePrefab, resourcesMinePosition, Quaternion.identity);
             }
-
-            // Make sure we see all the map
-            // -10 is used as z to see elements usually positioned at z = 0
-            // add 1 to orthographic size to that the top and bottom of map show inside view
-            mainCamera.transform.position = new Vector3(Map.mapDimensions.x / 2.0f, Map.mapDimensions.y / 2.0f, -10.0f);
-            mainCamera.orthographicSize = ((Map.mapDimensions.x + 1.0f) / mainCamera.aspect) / 2.0f;
         }
     }
 

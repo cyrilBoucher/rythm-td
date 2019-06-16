@@ -4,7 +4,6 @@ public class ResourcesMineController : MonoBehaviour
 {
     public ResourcesController resourcesController;    
     public GameObject inputFeedbackTextPrefab;
-    public GameObject worldSpaceCanvasGameObject;
     public int resourcesNumber;
 
     private BeatPatternResolver _beatPatternResolver;
@@ -23,7 +22,7 @@ public class ResourcesMineController : MonoBehaviour
         GameObject inputFeedbackTextGameObjectInstance = Instantiate(inputFeedbackTextPrefab,
             transform.position + new Vector3(0.0f, 0.5f, 0.0f),
             Quaternion.identity,
-            worldSpaceCanvasGameObject.transform);
+            GameController.worldSpaceCanvasInstance.transform);
 
         _inputFeedbackTextController = inputFeedbackTextGameObjectInstance.GetComponent<InputFeedbackTextController>();
     }
