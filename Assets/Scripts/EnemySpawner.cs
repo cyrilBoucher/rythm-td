@@ -20,6 +20,9 @@ public class EnemySpawner : MonoBehaviour, IBeatActor
         _spawnCooldownBeat = spawnIntervalBeat;
         _waveCooldownBeat = 0;
 
+        EnemyController enemyController = enemyGameObject.GetComponent<EnemyController>();
+        enemyController.resourcesController = resourcesController;
+
         BeatEngine.BeatEvent += OnBeat;
     }
 
@@ -55,8 +58,6 @@ public class EnemySpawner : MonoBehaviour, IBeatActor
 
         if (_spawnCooldownBeat >= spawnIntervalBeat)
         {
-            EnemyController enemyController = enemyGameObject.GetComponent<EnemyController>();
-            enemyController.resourcesController = resourcesController;
             Instantiate(enemyGameObject, transform.position, Quaternion.identity);
 
             _spawnedEnemies++;
