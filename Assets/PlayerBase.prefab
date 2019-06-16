@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6050539050003715154}
   - component: {fileID: 6050539050003715153}
   m_Layer: 0
-  m_Name: AsteroidSprite
+  m_Name: PlayerBase
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
