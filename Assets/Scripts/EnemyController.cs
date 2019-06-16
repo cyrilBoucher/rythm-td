@@ -9,8 +9,10 @@ public class EnemyController : MonoBehaviour, IBeatActor
     private float _smoothTime = 1.0f;
     private Vector3 _velocity;
     private int _numberOfBeatsWaiting;
+    private GameObject _lifeBarInstance;
 
     public ResourcesController resourcesController;
+    public GameObject lifeBarPrefab;
     public EnemyRoute route;
     public int life;
     public int damage;
@@ -37,6 +39,10 @@ public class EnemyController : MonoBehaviour, IBeatActor
         _numberOfBeatsWaiting = speedBeatPerUnit;
 
         BeatEngine.BeatEvent += OnBeat;
+
+        LifeBarController controller = lifeBarPrefab.GetComponent<LifeBarController>();
+        controller.maxLife = life;
+        _lifeBarInstance = Instantiate(lifeBarPrefab, new Vector3(transform.position.x, transform.position.y - 0.5f, transform.position.z), Quaternion.identity, GameController.worldSpaceCanvasInstance.transform);
     }
 
 	// Update is called once per frame
@@ -53,6 +59,7 @@ public class EnemyController : MonoBehaviour, IBeatActor
         }
 
         transform.position = Vector3.SmoothDamp(transform.position, _nextPosition, ref _velocity, _smoothTime);
+        _lifeBarInstance.transform.position = new Vector3(transform.position.x, transform.position.y - 0.5f, transform.position.z);
     }
 
     void OnCollisionEnter2D(Collision2D other)
@@ -71,18 +78,22 @@ public class EnemyController : MonoBehaviour, IBeatActor
     {
         playerBase.TakeDamage(damage);
 
-        Destroy(this.gameObject);
+        Destroy(gameObject);
+        Destroy(_lifeBarInstance);
     }
 
     public void TakeDamage(int damage)
     {
         life -= damage;
 
+        _lifeBarInstance.GetComponent<LifeBarController>().TakeDamage(damage);
+
         if (life <= 0)
         {
             resourcesController.resourcesNumber += reward;
 
-            Destroy(this.gameObject);
+            Destroy(gameObject);
+            Destroy(_lifeBarInstance);
         }
     }
 

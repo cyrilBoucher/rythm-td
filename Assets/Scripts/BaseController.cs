@@ -1,14 +1,22 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class BaseController : MonoBehaviour
 {
-    public int life;
+    public int maxLife;
+    public GameObject lifeBarPrefab;
+
+    private int _life;
+    private GameObject _lifeBarInstance;
+    private LifeBarController _lifeBarController;
 
     // Start is called before the first frame update
     void Start()
     {
+        lifeBarPrefab.GetComponent<LifeBarController>().maxLife = maxLife;
+        _lifeBarInstance = Instantiate(lifeBarPrefab, new Vector3(transform.position.x, transform.position.y - 0.75f, transform.position.z), Quaternion.identity, GameController.worldSpaceCanvasInstance.transform);
+        _lifeBarController = _lifeBarInstance.GetComponent<LifeBarController>();
+
+        _life = maxLife;
     }
 
     // Update is called once per frame
@@ -19,11 +27,14 @@ public class BaseController : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
-        life -= damage;
+        _life -= damage;
 
-        if (life <= 0)
+        _lifeBarController.TakeDamage(damage);
+
+        if (_life <= 0)
         {
-            Destroy(this.gameObject);
+            Destroy(gameObject);
+            Destroy(_lifeBarInstance);
         }
     }
 }

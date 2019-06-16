@@ -94,8 +94,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f61a1cf54c4d6645ad0f9e408fc2324, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  resourcesController: {fileID: 0}
+  worldSpaceCanvas: {fileID: 0}
+  lifeBarPrefab: {fileID: 9105405127369175926, guid: bcc459fc2b5a2ca469364aecf5e9020d,
+    type: 3}
+  lifeBarInstance: {fileID: 0}
   life: 0
   damage: 0
+  reward: 0
+  speedBeatPerUnit: 0
 --- !u!61 &3883359029300959496
 BoxCollider2D:
   m_ObjectHideFlags: 0

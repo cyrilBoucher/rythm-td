@@ -103,5 +103,10 @@ PrefabInstance:
       propertyPath: life
       value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: 6050539050003715153, guid: da930b9b51da8d54481ba7b03cd6771e,
+        type: 3}
+      propertyPath: maxLife
+      value: 10
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: da930b9b51da8d54481ba7b03cd6771e, type: 3}

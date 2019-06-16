@@ -119,4 +119,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47b98f915d911ac4bb5495081407661a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  life: 0
+  maxLife: 0
+  lifeBarPrefab: {fileID: 9105405127369175926, guid: bcc459fc2b5a2ca469364aecf5e9020d,
+    type: 3}
