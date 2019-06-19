@@ -4,12 +4,14 @@ using UnityEngine;
 
 public class EnemyController : MonoBehaviour, IBeatActor
 {
-
     private Vector3 _nextPosition;
     private float _smoothTime = 1.0f;
     private Vector3 _velocity;
     private int _numberOfBeatsWaiting;
     private GameObject _lifeBarInstance;
+
+    public delegate void OnDeathAction();
+    static public event OnDeathAction DeathEvent;
 
     public ResourcesController resourcesController;
     public GameObject lifeBarPrefab;
@@ -78,8 +80,7 @@ public class EnemyController : MonoBehaviour, IBeatActor
     {
         playerBase.TakeDamage(damage);
 
-        Destroy(gameObject);
-        Destroy(_lifeBarInstance);
+        Death();
     }
 
     public void TakeDamage(int damage)
@@ -92,9 +93,16 @@ public class EnemyController : MonoBehaviour, IBeatActor
         {
             resourcesController.resourcesNumber += reward;
 
-            Destroy(gameObject);
-            Destroy(_lifeBarInstance);
+            Death();
         }
+    }
+
+    private void Death()
+    {
+        Destroy(gameObject);
+        Destroy(_lifeBarInstance);
+
+        DeathEvent();
     }
 
     public void OnBeat()

@@ -14,6 +14,11 @@ public class EnemySpawner : MonoBehaviour, IBeatActor
     private int _waveCooldownBeat;
     private int _spawnedWaves = 0;
 
+    public int GetNumberOfEnemiesToSpawn()
+    {
+        return enemyWaves * enemiesToSpawn;
+    }
+
     // Start is called before the first frame update
     void Start()
     {

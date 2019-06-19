@@ -14,6 +14,20 @@ public class GameController : MonoBehaviour {
     public bool loadMap = true;
     static public GameObject worldSpaceCanvasInstance;
 
+    private int _enemiesAlive;
+
+    void OnEnable()
+    {
+        EnemyController.DeathEvent += OnEnemyDeath;
+        BaseController.DestroyedEvent += OnBaseDestroyed;
+    }
+
+    void OnDisable()
+    {
+        EnemyController.DeathEvent -= OnEnemyDeath;
+        BaseController.DestroyedEvent -= OnBaseDestroyed;
+    }
+
     void Awake()
     {
         if (loadMap)
@@ -39,6 +53,7 @@ public class GameController : MonoBehaviour {
             foreach(GameObject enemySpawnerGameObject in enemySpawnerGameObjects)
             {
                 enemySpawnerGameObject.GetComponent<EnemySpawner>().resourcesController = resourcesController.GetComponent<ResourcesController>();
+                _enemiesAlive += enemySpawnerGameObject.GetComponent<EnemySpawner>().GetNumberOfEnemiesToSpawn();
 
                 Instantiate(enemySpawnerGameObject, Map.enemySpawnPosition, Quaternion.identity);
             }
@@ -61,5 +76,13 @@ public class GameController : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
+    }
+
+    void OnEnemyDeath()
+    {
+    }
+
+    void OnBaseDestroyed()
+    {
     }
 }

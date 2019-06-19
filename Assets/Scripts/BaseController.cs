@@ -2,6 +2,9 @@
 
 public class BaseController : MonoBehaviour
 {
+    public delegate void OnDestroyedAction();
+    static public OnDestroyedAction DestroyedEvent;
+
     public int maxLife;
     public GameObject lifeBarPrefab;
 
@@ -33,6 +36,8 @@ public class BaseController : MonoBehaviour
 
         if (_life <= 0)
         {
+            DestroyedEvent();
+
             Destroy(gameObject);
             Destroy(_lifeBarInstance);
         }
