@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour {
 
@@ -80,9 +81,18 @@ public class GameController : MonoBehaviour {
 
     void OnEnemyDeath()
     {
+        _enemiesAlive--;
+
+        if (_enemiesAlive <= 0)
+        {
+            OutroData.outroState = OutroData.OutroState.Win;
+            SceneManager.LoadSceneAsync("Outro");
+        }
     }
 
     void OnBaseDestroyed()
     {
+        OutroData.outroState = OutroData.OutroState.Loose;
+        SceneManager.LoadSceneAsync("Outro");
     }
 }

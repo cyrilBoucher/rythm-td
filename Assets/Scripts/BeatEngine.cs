@@ -44,8 +44,6 @@ public class BeatEngine : MonoBehaviour
         {
             Destroy(gameObject);
         }
-
-        DontDestroyOnLoad(gameObject);
     }
 
     void StartBeat(int beatsPerMinute)
