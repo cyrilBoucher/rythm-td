@@ -25,7 +25,7 @@ PrefabInstance:
     - target: {fileID: 3883359029300959499, guid: 52f95dcc9d8c27144abc538edc7b13c8,
         type: 3}
       propertyPath: reward
-      value: 10
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3883359029300959499, guid: 52f95dcc9d8c27144abc538edc7b13c8,
         type: 3}
