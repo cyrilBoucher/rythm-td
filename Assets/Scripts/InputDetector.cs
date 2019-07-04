@@ -110,8 +110,6 @@ public class InputDetector
 
                 Debug.Log("Tap");
             }
-
-            _currentCollider = null;
         }
 
         return input;

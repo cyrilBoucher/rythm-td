@@ -6,18 +6,18 @@ public class ResourcesMineController : MonoBehaviour
     public GameObject inputFeedbackTextPrefab;
     public int resourcesNumber;
 
-    private BeatPatternResolver _beatPatternResolver;
+    private BeatPattern _beatPattern = new BeatPattern();
+    private BeatPatternButton _beatPatternButton;
     private InputFeedbackTextController _inputFeedbackTextController;
 
     // Start is called before the first frame update
     void Start()
     {
-        _beatPatternResolver = new BeatPatternResolver();
+        _beatPatternButton = GetComponent<BeatPatternButton>();
 
-        BeatPattern beatPattern = new BeatPattern();
-        beatPattern.Add(BeatPattern.Input.Tap);
+        _beatPattern.pattern.Add(BeatPattern.Input.Tap);
 
-        _beatPatternResolver.SetPattern(beatPattern);
+        _beatPatternButton.AddPattern(_beatPattern, OnMiningBeatPatternResolved, OnMiningBeatPatternInput);
 
         GameObject inputFeedbackTextGameObjectInstance = Instantiate(inputFeedbackTextPrefab,
             transform.position + new Vector3(0.0f, 0.5f, 0.0f),
@@ -27,33 +27,28 @@ public class ResourcesMineController : MonoBehaviour
         _inputFeedbackTextController = inputFeedbackTextGameObjectInstance.GetComponent<InputFeedbackTextController>();
     }
 
-    // Update is called once per frame
-    void Update()
+    void OnMiningBeatPatternResolved()
     {
-        BeatPattern.Input input = InputDetector.CheckForInput(GetComponent<BoxCollider2D>());
-
-        BeatPatternResolver.ReturnType result = _beatPatternResolver.Run2(input);
-
-        if (result == BeatPatternResolver.ReturnType.Validated)
+        if (resourcesNumber == 0)
         {
-            if (resourcesNumber == 0)
-            {
-                _inputFeedbackTextController.ShowFeedback("Empty!");
-
-                return;
-            }
-
-            resourcesController.resourcesNumber++;
-            resourcesNumber--;
-
-            _inputFeedbackTextController.ShowFeedback(BeatPatternResolver.EnumToString(BeatPatternResolver.ReturnType.Good));
+            _inputFeedbackTextController.ShowFeedback("Empty!");
 
             return;
         }
 
-        if (result != BeatPatternResolver.ReturnType.Waiting)
-        {
-            _inputFeedbackTextController.ShowFeedback(BeatPatternResolver.EnumToString(result));
-        }
+        resourcesController.resourcesNumber++;
+        resourcesNumber--;
+
+        _inputFeedbackTextController.ShowFeedback(BeatPatternResolver.EnumToString(BeatPatternResolver.ReturnType.Good));
+    }
+
+    void OnMiningBeatPatternInput(BeatPatternResolver.ReturnType result)
+    {
+        _inputFeedbackTextController.ShowFeedback(BeatPatternResolver.EnumToString(result));
+    }
+
+    void OnDisable()
+    {
+        _beatPatternButton.RemovePattern(_beatPattern);
     }
 }

@@ -1,22 +1,24 @@
 ﻿using UnityEngine;
 
-public class DefenseSpawner : MonoBehaviour {
-
+public class DefenseSpawner : MonoBehaviour
+{
     private GameObject _inputFeedbackTextGameObjectInstance;
     private InputFeedbackTextController _inputFeedbackTextController;
     private BeatPattern _beatPattern = new BeatPattern();
-    private BeatPatternResolver _beatPatternResolver = new BeatPatternResolver();
+    private BeatPatternButton _beatPatternButton;
 
     public ResourcesController resourcesController;
     public GameObject inputFeedbackTextPrefab;
     public GameObject defensePrefab;
 
     // Use this for initialization
-    void Start () {
-        _beatPattern.Add(BeatPattern.Input.Tap);
-        _beatPattern.Add(BeatPattern.Input.Tap);
+    void Start()
+    {
+        _beatPattern.pattern.Add(BeatPattern.Input.Tap);
+        _beatPattern.pattern.Add(BeatPattern.Input.Tap);
 
-        _beatPatternResolver.SetPattern(_beatPattern);
+        _beatPatternButton = GetComponent<BeatPatternButton>();
+        _beatPatternButton.AddPattern(_beatPattern, OnBeatPatternResolved, OnBeatPatternInput);
 
         _inputFeedbackTextGameObjectInstance = Instantiate(inputFeedbackTextPrefab,
             transform.position + new Vector3(0.0f, 0.5f, 0.0f),
@@ -26,41 +28,34 @@ public class DefenseSpawner : MonoBehaviour {
         _inputFeedbackTextController = _inputFeedbackTextGameObjectInstance.GetComponent<InputFeedbackTextController>();
     }
 
-    // Update is called once per frame
-    void Update () {
+    void OnBeatPatternResolved()
+    {
+        DefenseController defenseController = defensePrefab.GetComponent<DefenseController>();
 
-        BeatPattern.Input input = InputDetector.CheckForInput(GetComponent<BoxCollider2D>());
-
-        BeatPatternResolver.ReturnType result = _beatPatternResolver.Run2(input);
-
-        if (result == BeatPatternResolver.ReturnType.Validated)
+        if (resourcesController.resourcesNumber < defenseController.price)
         {
-            DefenseController defenseController = defensePrefab.GetComponent<DefenseController>();
-
-            if (resourcesController.resourcesNumber < defenseController.price)
-            {
-                _inputFeedbackTextController.ShowFeedback("Not enough resources!");
-
-                return;
-            }
-
-            defenseController.resourcesController = resourcesController;
-            Instantiate(defensePrefab, transform.position, Quaternion.identity);
-            resourcesController.resourcesNumber -= defenseController.price;
-
-            Destroy(gameObject);
-
-            // CHECK ME: Maybe avoid doing that?
-            Destroy(_inputFeedbackTextGameObjectInstance);
+            _inputFeedbackTextController.ShowFeedback("Not enough resources!");
 
             return;
         }
 
-        if (result != BeatPatternResolver.ReturnType.Waiting)
-        {
-            _inputFeedbackTextController.ShowFeedback(BeatPatternResolver.EnumToString(result));
+        defenseController.resourcesController = resourcesController;
+        Instantiate(defensePrefab, transform.position, Quaternion.identity);
+        resourcesController.resourcesNumber -= defenseController.price;
 
-            return;
-        }
+        _beatPatternButton.RemovePattern(_beatPattern);
+
+        Destroy(gameObject);
+        Destroy(_inputFeedbackTextGameObjectInstance);
+    }
+
+    void OnBeatPatternInput(BeatPatternResolver.ReturnType result)
+    {
+        _inputFeedbackTextController.ShowFeedback(BeatPatternResolver.EnumToString(result));
+    }
+
+    void OnDisable()
+    {
+        _beatPatternButton.RemovePattern(_beatPattern);
     }
 }

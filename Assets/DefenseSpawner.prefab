@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 632944621268992545}
   - component: {fileID: 7299235808504458120}
   - component: {fileID: 5340297808430293425}
+  - component: {fileID: 3601493736548433865}
   m_Layer: 0
   m_Name: DefenseSpawner
   m_TagString: Untagged
@@ -120,8 +121,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   resourcesController: {fileID: 0}
-  worldSpaceCanvasGameObject: {fileID: 0}
   inputFeedbackTextPrefab: {fileID: 302928808805573940, guid: afa3575a47468ea48bccc282af401c37,
     type: 3}
   defensePrefab: {fileID: 3588488484636857727, guid: 655625c90e73150498c8bcd219906abb,
     type: 3}
+--- !u!114 &3601493736548433865
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3814885585730906813}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e63c3e60902363d4a90ee9da2de10bf8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

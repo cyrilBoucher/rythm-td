@@ -1,8 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using System.Collections.Generic;
 
-public class BeatPattern : IEnumerable
+public class BeatPattern
 {
     public enum Input
     {
@@ -16,21 +14,20 @@ public class BeatPattern : IEnumerable
 
     public List<Input> pattern = new List<Input>();
 
-    public IEnumerator GetEnumerator()
+    public override string ToString()
     {
-        foreach(Input input in pattern)
+        string finalString = "{";
+        for (int i = 0; i < pattern.Count; i++)
         {
-            yield return input;
+            finalString += string.Format(" {0}", pattern[i].ToString());
+
+            if (i != pattern.Count - 1)
+            {
+                finalString += ",";
+            }
         }
-    }
+        finalString += " }";
 
-    public void Add(Input input)
-    {
-        pattern.Add(input);
-    }
-
-    public Input At(int index)
-    {
-        return pattern[index];
+        return finalString;
     }
 }

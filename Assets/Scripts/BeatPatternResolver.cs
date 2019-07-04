@@ -3,6 +3,12 @@ using UnityEngine;
 
 public class BeatPatternResolver
 {
+    public delegate void OnResolvedAction();
+    public event OnResolvedAction ResolvedEvent;
+
+    public delegate void OnInputAction(ReturnType result);
+    public event OnInputAction InputEvent;
+
     private BeatPattern _beatPattern;
     private int _beatIdToValidate;
     private int _currentPatternIndex = 0;
@@ -25,6 +31,11 @@ public class BeatPatternResolver
         _beatPattern = pattern;
     }
 
+    public BeatPattern GetPattern()
+    {
+        return _beatPattern;
+    }
+
     public ReturnType Run2(BeatPattern.Input input)
     {
         if (_currentPatternIndex == 0)
@@ -40,12 +51,32 @@ public class BeatPatternResolver
             }
             else
             {
+                if (result == ReturnType.Validated)
+                {
+                    ResolvedEvent();
+                }
+                else if (result != ReturnType.Waiting)
+                {
+                    InputEvent(result);
+                }
+
                 return result;
             }
         }
         else
         {
-            return Run(BeatEngine.instance.TimeToBeatIdSec(_beatIdToValidate), input);
+            ReturnType result = Run(BeatEngine.instance.TimeToBeatIdSec(_beatIdToValidate), input);
+
+            if (result == ReturnType.Validated)
+            {
+                ResolvedEvent();
+            }
+            else if (result != ReturnType.Waiting)
+            {
+                InputEvent(result);
+            }
+
+            return result;
         }
     }
 
@@ -58,10 +89,10 @@ public class BeatPatternResolver
         // TODO: Maybe find a better to do this
         float localValidationOffset = validationOffset;
 
-        if (_beatPattern.At(_currentPatternIndex) == BeatPattern.Input.SlideDown ||
-            _beatPattern.At(_currentPatternIndex) == BeatPattern.Input.SlideUp ||
-            _beatPattern.At(_currentPatternIndex) == BeatPattern.Input.SlideLeft ||
-            _beatPattern.At(_currentPatternIndex) == BeatPattern.Input.SlideRight)
+        if (_beatPattern.pattern[_currentPatternIndex] == BeatPattern.Input.SlideDown ||
+            _beatPattern.pattern[_currentPatternIndex] == BeatPattern.Input.SlideUp ||
+            _beatPattern.pattern[_currentPatternIndex] == BeatPattern.Input.SlideLeft ||
+            _beatPattern.pattern[_currentPatternIndex] == BeatPattern.Input.SlideRight)
         {
             localValidationOffset *= 2.0f;
         }
@@ -70,7 +101,7 @@ public class BeatPatternResolver
         // Hit the beat correctly
         if (input != BeatPattern.Input.Skip &&
             Math.Abs(timeToNextBeatIdToValidateSec) <= localValidationOffset &&
-            _beatPattern.At(_currentPatternIndex) == input)
+            _beatPattern.pattern[_currentPatternIndex] == input)
         {
             return Success();
         }
@@ -79,7 +110,7 @@ public class BeatPatternResolver
         // Skipped the beat correctly
         if (input == BeatPattern.Input.Skip &&
             timeToNextBeatIdToValidateSec > localValidationOffset &&
-            _beatPattern.At(_currentPatternIndex) == BeatPattern.Input.Skip)
+            _beatPattern.pattern[_currentPatternIndex] == BeatPattern.Input.Skip)
         {
             return Success();
         }
@@ -88,7 +119,7 @@ public class BeatPatternResolver
         // Either hit before or after the beat
         if (input != BeatPattern.Input.Skip &&
             Math.Abs(timeToNextBeatIdToValidateSec) > localValidationOffset &&
-            _beatPattern.At(_currentPatternIndex) != BeatPattern.Input.Skip)
+            _beatPattern.pattern[_currentPatternIndex] != BeatPattern.Input.Skip)
         {
             Failure();
 
@@ -105,7 +136,7 @@ public class BeatPatternResolver
         // Fail
         // Hit the beat when it should have been skipped
         if (input != BeatPattern.Input.Skip &&
-            _beatPattern.At(_currentPatternIndex) == BeatPattern.Input.Skip)
+            _beatPattern.pattern[_currentPatternIndex] == BeatPattern.Input.Skip)
         {
             Failure();
 
@@ -116,7 +147,7 @@ public class BeatPatternResolver
         // Did not hit the beat
         if (input == BeatPattern.Input.Skip &&
             timeToNextBeatIdToValidateSec > localValidationOffset &&
-            _beatPattern.At(_currentPatternIndex) != BeatPattern.Input.Skip)
+            _beatPattern.pattern[_currentPatternIndex] != BeatPattern.Input.Skip)
         {
             Failure();
 
@@ -150,7 +181,7 @@ public class BeatPatternResolver
         _currentPatternIndex = 0;
     }
 
-    public static String EnumToString(ReturnType returnType)
+    public static string EnumToString(ReturnType returnType)
     {
         switch(returnType)
         {

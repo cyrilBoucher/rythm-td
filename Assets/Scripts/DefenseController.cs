@@ -12,12 +12,13 @@ public class DefenseController : MonoBehaviour, IBeatActor
     public int attackCooldownBeat;
     public int price;
 
-    private BeatPatternResolver _upgradeBeatPatternResolver = new BeatPatternResolver();
-    private BeatPatternResolver _downgradeBeatPatternResolver = new BeatPatternResolver();
+    private BeatPattern _upgradeBeatPattern = new BeatPattern();
+    private BeatPattern _downgradeBeatPattern = new BeatPattern();
     private int _cooldownCounterBeat;
     private int _currentBeatId;
     private List<EnemyController> _enemiesInRange = new List<EnemyController>();
     private InputFeedbackTextController _inputFeedbackTextController;
+    private BeatPatternButton _beatPatternButton;
 
     // Start is called before the first frame update
     void Start()
@@ -34,17 +35,16 @@ public class DefenseController : MonoBehaviour, IBeatActor
             downgradedDefensePrefab.GetComponent<DefenseController>().resourcesController = resourcesController;
         }
 
-        BeatPattern beatPattern = new BeatPattern();
-        beatPattern.Add(BeatPattern.Input.Tap);
-        beatPattern.Add(BeatPattern.Input.SlideUp);
+        _beatPatternButton = GetComponent<BeatPatternButton>();
 
-        _upgradeBeatPatternResolver.SetPattern(beatPattern);
+        _upgradeBeatPattern.pattern.Add(BeatPattern.Input.Tap);
+        _upgradeBeatPattern.pattern.Add(BeatPattern.Input.SlideUp);
 
-        beatPattern = new BeatPattern();
-        beatPattern.Add(BeatPattern.Input.Tap);
-        beatPattern.Add(BeatPattern.Input.SlideDown);
+        _downgradeBeatPattern.pattern.Add(BeatPattern.Input.Tap);
+        _downgradeBeatPattern.pattern.Add(BeatPattern.Input.SlideDown);
 
-        _downgradeBeatPatternResolver.SetPattern(beatPattern);
+        _beatPatternButton.AddPattern(_upgradeBeatPattern, OnUpgradeBeatPatternResolved, OnUpgradeBeatPatternInput);
+        _beatPatternButton.AddPattern(_downgradeBeatPattern, OnDowngradeBeatPatternResolved, OnDowngradeBeatPatternInput);
 
         GameObject inputFeedbackTextGameObjectInstance = Instantiate(inputFeedbackTextPrefab,
             transform.position + new Vector3(0.0f,1.0f, 0.0f),
@@ -54,71 +54,6 @@ public class DefenseController : MonoBehaviour, IBeatActor
         _inputFeedbackTextController = inputFeedbackTextGameObjectInstance.GetComponent<InputFeedbackTextController>();
 
         BeatEngine.BeatEvent += OnBeat;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        BeatPattern.Input input = InputDetector.CheckForInput(GetComponent<BoxCollider2D>());
-
-        BeatPatternResolver.ReturnType result = _upgradeBeatPatternResolver.Run2(input);
-
-        if (result == BeatPatternResolver.ReturnType.Validated)
-        {
-            if (upgradedDefensePrefab != null)
-            {
-                DefenseController upgradedDefenseController = upgradedDefensePrefab.GetComponent<DefenseController>();
-                if (resourcesController.resourcesNumber >= upgradedDefenseController.price)
-                {
-                    resourcesController.resourcesNumber -= upgradedDefenseController.price;
-
-                    Instantiate(upgradedDefensePrefab, transform.position, Quaternion.identity);
-
-                    Destroy(gameObject);
-
-                    _inputFeedbackTextController.ShowFeedback("Upgrade!");
-                }
-                else
-                {
-                    _inputFeedbackTextController.ShowFeedback("Not enough resources!");
-                }
-            }
-            else
-            {
-                _inputFeedbackTextController.ShowFeedback("Max level reached!");
-            }
-
-            return;
-        }
-
-        result = _downgradeBeatPatternResolver.Run2(input);
-
-        if (result == BeatPatternResolver.ReturnType.Validated)
-        {
-            if (downgradedDefensePrefab != null)
-            {
-                DefenseController downgradedDefenseController = downgradedDefensePrefab.GetComponent<DefenseController>();
-
-                resourcesController.resourcesNumber += downgradedDefenseController.price;
-
-                Instantiate(downgradedDefenseController, transform.position, Quaternion.identity);
-
-                Destroy(gameObject);
-
-                _inputFeedbackTextController.ShowFeedback("Downgrade!");
-            }
-            else
-            {
-                _inputFeedbackTextController.ShowFeedback("Min level reached!");
-            }
-
-            return;
-        }
-
-        if (result != BeatPatternResolver.ReturnType.Waiting)
-        {
-            _inputFeedbackTextController.ShowFeedback(BeatPatternResolver.EnumToString(result));
-        }
     }
 
     void OnTriggerEnter2D(Collider2D collision)
@@ -199,6 +134,65 @@ public class DefenseController : MonoBehaviour, IBeatActor
 
     void OnDestroy()
     {
-        BeatEngine.BeatEvent += OnBeat;
+        BeatEngine.BeatEvent -= OnBeat;
+
+        _beatPatternButton.RemovePattern(_upgradeBeatPattern);
+        _beatPatternButton.RemovePattern(_downgradeBeatPattern);
+    }
+
+    void OnUpgradeBeatPatternResolved()
+    {
+        if (upgradedDefensePrefab != null)
+        {
+            DefenseController upgradedDefenseController = upgradedDefensePrefab.GetComponent<DefenseController>();
+            if (resourcesController.resourcesNumber >= upgradedDefenseController.price)
+            {
+                resourcesController.resourcesNumber -= upgradedDefenseController.price;
+
+                Instantiate(upgradedDefensePrefab, transform.position, Quaternion.identity);
+
+                Destroy(gameObject);
+
+                _inputFeedbackTextController.ShowFeedback("Upgrade!");
+            }
+            else
+            {
+                _inputFeedbackTextController.ShowFeedback("Not enough resources!");
+            }
+        }
+        else
+        {
+            _inputFeedbackTextController.ShowFeedback("Max level reached!");
+        }
+    }
+
+    void OnUpgradeBeatPatternInput(BeatPatternResolver.ReturnType returnType)
+    {
+        _inputFeedbackTextController.ShowFeedback(BeatPatternResolver.EnumToString(returnType));
+    }
+
+    void OnDowngradeBeatPatternResolved()
+    {
+        if (downgradedDefensePrefab != null)
+        {
+            DefenseController downgradedDefenseController = downgradedDefensePrefab.GetComponent<DefenseController>();
+
+            resourcesController.resourcesNumber += downgradedDefenseController.price;
+
+            Instantiate(downgradedDefenseController, transform.position, Quaternion.identity);
+
+            Destroy(gameObject);
+
+            _inputFeedbackTextController.ShowFeedback("Downgrade!");
+        }
+        else
+        {
+            _inputFeedbackTextController.ShowFeedback("Min level reached!");
+        }
+    }
+
+    void OnDowngradeBeatPatternInput(BeatPatternResolver.ReturnType returnType)
+    {
+        _inputFeedbackTextController.ShowFeedback(BeatPatternResolver.EnumToString(returnType));
     }
 }
