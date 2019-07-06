@@ -8,12 +8,15 @@ public class DefenseController : MonoBehaviour, IBeatActor
     public GameObject upgradedDefensePrefab;
     public GameObject downgradedDefensePrefab;
     public GameObject inputFeedbackTextPrefab;
+    public GameObject defenseSpawnerPrefab;
     public int projectilePower;
     public int attackCooldownBeat;
     public int price;
 
     private BeatPattern _upgradeBeatPattern = new BeatPattern();
     private BeatPattern _downgradeBeatPattern = new BeatPattern();
+    private BeatPattern _sellLeftBeatPattern = new BeatPattern();
+    private BeatPattern _sellRightBeatPattern = new BeatPattern();
     private int _cooldownCounterBeat;
     private int _currentBeatId;
     private List<EnemyController> _enemiesInRange = new List<EnemyController>();
@@ -35,6 +38,8 @@ public class DefenseController : MonoBehaviour, IBeatActor
             downgradedDefensePrefab.GetComponent<DefenseController>().resourcesController = resourcesController;
         }
 
+        defenseSpawnerPrefab.GetComponent<DefenseSpawner>().resourcesController = resourcesController;
+
         _beatPatternButton = GetComponent<BeatPatternButton>();
 
         _upgradeBeatPattern.pattern.Add(BeatPattern.Input.Tap);
@@ -43,8 +48,16 @@ public class DefenseController : MonoBehaviour, IBeatActor
         _downgradeBeatPattern.pattern.Add(BeatPattern.Input.Tap);
         _downgradeBeatPattern.pattern.Add(BeatPattern.Input.SlideDown);
 
-        _beatPatternButton.AddPattern(_upgradeBeatPattern, OnUpgradeBeatPatternResolved, OnUpgradeBeatPatternInput);
-        _beatPatternButton.AddPattern(_downgradeBeatPattern, OnDowngradeBeatPatternResolved, OnDowngradeBeatPatternInput);
+        _sellLeftBeatPattern.pattern.Add(BeatPattern.Input.Tap);
+        _sellLeftBeatPattern.pattern.Add(BeatPattern.Input.SlideLeft);
+
+        _sellRightBeatPattern.pattern.Add(BeatPattern.Input.Tap);
+        _sellRightBeatPattern.pattern.Add(BeatPattern.Input.SlideRight);
+
+        _beatPatternButton.AddPattern(_upgradeBeatPattern, OnUpgradeBeatPatternResolved, OnBeatPatternInput);
+        _beatPatternButton.AddPattern(_downgradeBeatPattern, OnDowngradeBeatPatternResolved, OnBeatPatternInput);
+        _beatPatternButton.AddPattern(_sellLeftBeatPattern, OnSellBeatPatternResolved, OnBeatPatternInput);
+        _beatPatternButton.AddPattern(_sellRightBeatPattern, OnSellBeatPatternResolved, OnBeatPatternInput);
 
         GameObject inputFeedbackTextGameObjectInstance = Instantiate(inputFeedbackTextPrefab,
             transform.position + new Vector3(0.0f,1.0f, 0.0f),
@@ -145,9 +158,10 @@ public class DefenseController : MonoBehaviour, IBeatActor
         if (upgradedDefensePrefab != null)
         {
             DefenseController upgradedDefenseController = upgradedDefensePrefab.GetComponent<DefenseController>();
-            if (resourcesController.resourcesNumber >= upgradedDefenseController.price)
+            int priceForUpgrade = upgradedDefenseController.price - price;
+            if (resourcesController.resourcesNumber >= priceForUpgrade)
             {
-                resourcesController.resourcesNumber -= upgradedDefenseController.price;
+                resourcesController.resourcesNumber -= priceForUpgrade;
 
                 Instantiate(upgradedDefensePrefab, transform.position, Quaternion.identity);
 
@@ -166,20 +180,16 @@ public class DefenseController : MonoBehaviour, IBeatActor
         }
     }
 
-    void OnUpgradeBeatPatternInput(BeatPatternResolver.ReturnType returnType)
-    {
-        _inputFeedbackTextController.ShowFeedback(BeatPatternResolver.EnumToString(returnType));
-    }
-
     void OnDowngradeBeatPatternResolved()
     {
         if (downgradedDefensePrefab != null)
         {
             DefenseController downgradedDefenseController = downgradedDefensePrefab.GetComponent<DefenseController>();
 
+            int earnedResourcesForDowngrade = (price - downgradedDefenseController.price) / 2;
             resourcesController.resourcesNumber += downgradedDefenseController.price;
 
-            Instantiate(downgradedDefenseController, transform.position, Quaternion.identity);
+            Instantiate(downgradedDefensePrefab, transform.position, Quaternion.identity);
 
             Destroy(gameObject);
 
@@ -191,7 +201,19 @@ public class DefenseController : MonoBehaviour, IBeatActor
         }
     }
 
-    void OnDowngradeBeatPatternInput(BeatPatternResolver.ReturnType returnType)
+    void OnSellBeatPatternResolved()
+    {
+        int earnedResourcesForSelling = price / 2;
+        resourcesController.resourcesNumber += earnedResourcesForSelling;
+
+        Instantiate(defenseSpawnerPrefab, transform.position, Quaternion.identity);
+
+        Destroy(gameObject);
+
+        _inputFeedbackTextController.ShowFeedback("Sold!");
+    }
+
+    void OnBeatPatternInput(BeatPatternResolver.ReturnType returnType)
     {
         _inputFeedbackTextController.ShowFeedback(BeatPatternResolver.EnumToString(returnType));
     }

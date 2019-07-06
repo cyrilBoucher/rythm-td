@@ -53,6 +53,16 @@ public class BeatPatternButton : MonoBehaviour
 
     public void AddPattern(BeatPattern pattern, BeatPatternResolver.OnResolvedAction onPatternResolvedFunction, BeatPatternResolver.OnInputAction onPatternInputFunction)
     {
+        if (pattern == null)
+        {
+            throw new NullReferenceException("Must provide a valid beat pattern to resolve!");
+        }
+
+        if (pattern.pattern.Count == 0)
+        {
+            throw new ArgumentException("Pattern cannot be empty!");
+        }
+
         BeatPatternResolver resolver = new BeatPatternResolver();
         resolver.SetPattern(pattern);
 

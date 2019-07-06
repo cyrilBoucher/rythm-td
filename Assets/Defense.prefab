@@ -101,6 +101,8 @@ MonoBehaviour:
   downgradedDefensePrefab: {fileID: 0}
   inputFeedbackTextPrefab: {fileID: 302928808805573940, guid: afa3575a47468ea48bccc282af401c37,
     type: 3}
+  defenseSpawnerPrefab: {fileID: 3814885585730906813, guid: e93c47d28f578c84a8ef9d4ebdfc6e30,
+    type: 3}
   projectilePower: 0
   attackCooldownBeat: 0
   price: 0
