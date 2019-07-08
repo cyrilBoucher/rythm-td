@@ -30,4 +30,9 @@ public class OutroScreenController : MonoBehaviour
     {
         SceneManager.LoadSceneAsync("SampleScene");
     }
+
+    public void OnShopButtonClicked()
+    {
+        SceneManager.LoadSceneAsync("Shop");
+    }
 }

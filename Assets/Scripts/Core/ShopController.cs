@@ -47,6 +47,6 @@ public class ShopController : MonoBehaviour
 
     public void OnDoneButtonClicked()
     {
-        SceneManager.LoadSceneAsync("SampleScene");
+        SceneManager.LoadSceneAsync("Outro");
     }
 }
