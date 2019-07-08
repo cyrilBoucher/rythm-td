@@ -2,7 +2,6 @@
 
 public class EnemySpawner : MonoBehaviour, IBeatActor
 {
-    public ResourcesController resourcesController;
     public GameObject enemyGameObject;
     public int enemiesToSpawn;
     public int spawnIntervalBeat;
@@ -24,9 +23,6 @@ public class EnemySpawner : MonoBehaviour, IBeatActor
     {
         _spawnCooldownBeat = spawnIntervalBeat;
         _waveCooldownBeat = 0;
-
-        EnemyController enemyController = enemyGameObject.GetComponent<EnemyController>();
-        enemyController.resourcesController = resourcesController;
 
         BeatEngine.BeatEvent += OnBeat;
     }

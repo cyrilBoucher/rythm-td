@@ -1,21 +1,41 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
+﻿using System;
 
-public class ResourcesController : MonoBehaviour
+public class ResourcesController
 {
-    public Text resourcesText;
-    public int resourcesNumber;
+    private static int _resourcesNumber;
 
-    // Start is called before the first frame update
-    void Start()
+    public static int GetResourcesNumber()
     {
+        return _resourcesNumber;
     }
 
-    // Update is called once per frame
-    void Update()
+    public static void SetResourcesNumber(int resourcesNumber)
     {
-        resourcesText.text = resourcesNumber.ToString();
+        if (resourcesNumber < 0)
+        {
+            throw new ArgumentException("Resources number cannot be negative");
+        }
+
+        _resourcesNumber = resourcesNumber;
+    }
+
+    public static void AddResources(int resourcesNumber)
+    {
+        if (resourcesNumber < 0)
+        {
+            throw new ArgumentException("Resources number cannot be negative");
+        }
+
+        _resourcesNumber += resourcesNumber;
+    }
+
+    public static void TakeResources(int resourcesNumber)
+    {
+        if (resourcesNumber < 0)
+        {
+            throw new ArgumentException("Resources number cannot be negative");
+        }
+
+        _resourcesNumber -= resourcesNumber;
     }
 }

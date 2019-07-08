@@ -2,7 +2,6 @@
 
 public class ResourcesMineController : MonoBehaviour
 {
-    public ResourcesController resourcesController;    
     public GameObject inputFeedbackTextPrefab;
     public int resourcesNumber;
 
@@ -36,7 +35,7 @@ public class ResourcesMineController : MonoBehaviour
             return;
         }
 
-        resourcesController.resourcesNumber++;
+        ResourcesController.AddResources(1);
         resourcesNumber--;
 
         _inputFeedbackTextController.ShowFeedback(BeatPatternResolver.EnumToString(BeatPatternResolver.ReturnType.Good));

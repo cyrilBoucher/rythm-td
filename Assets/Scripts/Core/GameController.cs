@@ -2,11 +2,11 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class GameController : MonoBehaviour {
-
+public class GameController : MonoBehaviour
+{
     public string mapResourceName;
+    public int startResourcesNumber;
     public Camera mainCamera;
-    public GameObject resourcesController;
     public List<GameObject> enemySpawnerGameObjects;
     public GameObject defenseSpawnerGameObject;
     public GameObject playerBaseGameObject;
@@ -53,7 +53,6 @@ public class GameController : MonoBehaviour {
         {
             foreach(GameObject enemySpawnerGameObject in enemySpawnerGameObjects)
             {
-                enemySpawnerGameObject.GetComponent<EnemySpawner>().resourcesController = resourcesController.GetComponent<ResourcesController>();
                 _enemiesAlive += enemySpawnerGameObject.GetComponent<EnemySpawner>().GetNumberOfEnemiesToSpawn();
 
                 Instantiate(enemySpawnerGameObject, Map.enemySpawnPosition, Quaternion.identity);
@@ -61,7 +60,6 @@ public class GameController : MonoBehaviour {
 
             Instantiate(playerBaseGameObject, Map.basePosition, Quaternion.identity);
 
-            defenseSpawnerGameObject.GetComponent<DefenseSpawner>().resourcesController = resourcesController.GetComponent<ResourcesController>();
             foreach (Vector3 defenseSpawnerPosition in Map.defenseSpawnPositions)
             {
                 Instantiate(defenseSpawnerGameObject, defenseSpawnerPosition, Quaternion.identity);
@@ -69,14 +67,11 @@ public class GameController : MonoBehaviour {
 
             foreach (Vector3 resourcesMinePosition in Map.resourcesMinePositions)
             {
-                resourcesMinePrefab.GetComponent<ResourcesMineController>().resourcesController = resourcesController.GetComponent<ResourcesController>();
                 Instantiate(resourcesMinePrefab, resourcesMinePosition, Quaternion.identity);
             }
         }
-    }
 
-    // Update is called once per frame
-    void Update () {
+        ResourcesController.SetResourcesNumber(startResourcesNumber);
     }
 
     void OnEnemyDeath()

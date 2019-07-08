@@ -242,80 +242,6 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 1784841}
   m_PrefabAsset: {fileID: 0}
---- !u!1001 &319273242
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 5559429562467747372, guid: a069352791c9be24c914e00ba620e531,
-        type: 3}
-      propertyPath: m_Name
-      value: ResourcesController
-      objectReference: {fileID: 0}
-    - target: {fileID: 5559429562467747375, guid: a069352791c9be24c914e00ba620e531,
-        type: 3}
-      propertyPath: resourcesNumber
-      value: 150
-      objectReference: {fileID: 0}
-    - target: {fileID: 5559429562467747374, guid: a069352791c9be24c914e00ba620e531,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 7.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 5559429562467747374, guid: a069352791c9be24c914e00ba620e531,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 1.4
-      objectReference: {fileID: 0}
-    - target: {fileID: 5559429562467747374, guid: a069352791c9be24c914e00ba620e531,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -20.442474
-      objectReference: {fileID: 0}
-    - target: {fileID: 5559429562467747374, guid: a069352791c9be24c914e00ba620e531,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5559429562467747374, guid: a069352791c9be24c914e00ba620e531,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5559429562467747374, guid: a069352791c9be24c914e00ba620e531,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5559429562467747374, guid: a069352791c9be24c914e00ba620e531,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5559429562467747374, guid: a069352791c9be24c914e00ba620e531,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 5559429562467747374, guid: a069352791c9be24c914e00ba620e531,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5559429562467747374, guid: a069352791c9be24c914e00ba620e531,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5559429562467747374, guid: a069352791c9be24c914e00ba620e531,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: a069352791c9be24c914e00ba620e531, type: 3}
 --- !u!114 &511097204 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4730506871736992971, guid: 9371e374c552a2c42b00a5be28fee4c9,
@@ -560,7 +486,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15fa96a9042afce479e3927440500799, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resourcesController: {fileID: 1840635193}
   upgradeButtons:
   - {fileID: 891874936}
   - {fileID: 511097204}
@@ -760,15 +685,9 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1840635193 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5559429562467747375, guid: a069352791c9be24c914e00ba620e531,
-    type: 3}
-  m_PrefabInstance: {fileID: 319273242}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5e8895feb16edf246bef624d1fcf39e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

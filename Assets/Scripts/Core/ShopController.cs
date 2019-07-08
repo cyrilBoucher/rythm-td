@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class ShopController : MonoBehaviour
 {
-    public ResourcesController resourcesController;
     public List<UpgradeButtonController> upgradeButtons = new List<UpgradeButtonController>();
 
     private List<Upgrade> _upgrades = new List<Upgrade>();
@@ -19,7 +19,7 @@ public class ShopController : MonoBehaviour
             upgradeButton.GetComponent<Button>().onClick.AddListener(delegate { OnDefenseUpgradeButtonClicked(upgrade); });
             upgradeButton.SetPrice(upgrade.price);
             upgradeButton.SetName(upgrade.name);
-            if (resourcesController.resourcesNumber < upgrade.price)
+            if (ResourcesController.GetResourcesNumber() < upgrade.price)
             {
                 upgradeButton.SetBuyable(false);
             }
@@ -31,7 +31,7 @@ public class ShopController : MonoBehaviour
     {
         for (int i = 0; i < upgradeButtons.Count; i++)
         {
-            if (resourcesController.resourcesNumber < _upgrades[i].price)
+            if (ResourcesController.GetResourcesNumber() < _upgrades[i].price)
             {
                 upgradeButtons[i].SetBuyable(false);
             }
@@ -40,9 +40,13 @@ public class ShopController : MonoBehaviour
 
     public void OnDefenseUpgradeButtonClicked(Upgrade upgrade)
     {
-        Debug.Log(string.Format("Bought {0} upgrade! Spending {1} resources", upgrade.name, upgrade.price));
-        resourcesController.resourcesNumber -= upgrade.price;
+        ResourcesController.TakeResources(upgrade.price);
 
         // TODO: Add this upgrade somewhere
+    }
+
+    public void OnDoneButtonClicked()
+    {
+        SceneManager.LoadSceneAsync("SampleScene");
     }
 }

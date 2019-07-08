@@ -13,7 +13,6 @@ public class EnemyController : MonoBehaviour, IBeatActor
     public delegate void OnDeathAction();
     static public event OnDeathAction DeathEvent;
 
-    public ResourcesController resourcesController;
     public GameObject lifeBarPrefab;
     public EnemyRoute route;
     public int life;
@@ -91,7 +90,7 @@ public class EnemyController : MonoBehaviour, IBeatActor
 
         if (life <= 0)
         {
-            resourcesController.resourcesNumber += reward;
+            ResourcesController.AddResources(reward);
 
             Death();
         }
