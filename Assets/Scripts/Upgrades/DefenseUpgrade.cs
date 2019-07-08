@@ -1,4 +1,4 @@
 ﻿public abstract class DefenseUpgrade : Upgrade
 {
-    protected abstract bool Apply(DefenseController defenseController);
+    public abstract bool Apply(DefenseController defenseController);
 }

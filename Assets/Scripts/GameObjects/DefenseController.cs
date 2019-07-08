@@ -69,6 +69,8 @@ public class DefenseController : MonoBehaviour, IBeatActor
         _inputFeedbackTextController = inputFeedbackTextGameObjectInstance.GetComponent<InputFeedbackTextController>();
 
         BeatEngine.BeatEvent += OnBeat;
+
+        UpgradesController.ApplyDefenseUpgrades(this);
     }
 
     void OnTriggerEnter2D(Collider2D collision)

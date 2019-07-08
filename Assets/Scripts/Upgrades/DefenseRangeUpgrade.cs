@@ -8,7 +8,7 @@
         name = "Defense range";
     }
 
-    protected override bool Apply(DefenseController defenseController)
+    public override bool Apply(DefenseController defenseController)
     {
         if (defenseController == null)
         {

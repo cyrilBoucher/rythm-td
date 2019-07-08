@@ -42,7 +42,7 @@ public class ShopController : MonoBehaviour
     {
         ResourcesController.TakeResources(upgrade.price);
 
-        // TODO: Add this upgrade somewhere
+        UpgradesController.AddUpgrade(upgrade);
     }
 
     public void OnDoneButtonClicked()
