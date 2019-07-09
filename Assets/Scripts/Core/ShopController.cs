@@ -7,19 +7,18 @@ public class ShopController : MonoBehaviour
 {
     public List<UpgradeButtonController> upgradeButtons = new List<UpgradeButtonController>();
 
-    private List<Upgrade> _upgrades = new List<Upgrade>();
-
     void Start()
     {
         foreach (UpgradeButtonController upgradeButton in upgradeButtons)
         {
-            Upgrade upgrade = UpgradeFactory.CreateUpgrade(upgradeButton.upgradeType);
-            _upgrades.Add(upgrade);
+            Upgrade upgrade = UpgradesController.GetUpgradeFromType(upgradeButton.upgradeType);
 
-            upgradeButton.GetComponent<Button>().onClick.AddListener(delegate { OnDefenseUpgradeButtonClicked(upgrade); });
+            upgradeButton.GetComponent<Button>().onClick.AddListener(delegate { OnDefenseUpgradeButtonClicked(upgradeButton); });
             upgradeButton.SetPrice(upgrade.price);
             upgradeButton.SetName(upgrade.name);
-            if (ResourcesController.GetResourcesNumber() < upgrade.price)
+            upgradeButton.SetBought(upgrade.bought);
+            if (!upgrade.bought &&
+                ResourcesController.GetResourcesNumber() < upgrade.price)
             {
                 upgradeButton.SetBuyable(false);
             }
@@ -29,20 +28,22 @@ public class ShopController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        for (int i = 0; i < upgradeButtons.Count; i++)
+        foreach (UpgradeButtonController upgradeButton in upgradeButtons)
         {
-            if (ResourcesController.GetResourcesNumber() < _upgrades[i].price)
+            if (!upgradeButton.WasBought() &&
+                ResourcesController.GetResourcesNumber() < upgradeButton.GetPrice())
             {
-                upgradeButtons[i].SetBuyable(false);
+                upgradeButton.SetBuyable(false);
             }
         }
     }
 
-    public void OnDefenseUpgradeButtonClicked(Upgrade upgrade)
+    public void OnDefenseUpgradeButtonClicked(UpgradeButtonController upgradeButton)
     {
-        ResourcesController.TakeResources(upgrade.price);
+        ResourcesController.TakeResources(upgradeButton.GetPrice());
+        upgradeButton.SetBought(true);
 
-        UpgradesController.AddUpgrade(upgrade);
+        UpgradesController.BuyUpgrade(upgradeButton.upgradeType);
     }
 
     public void OnDoneButtonClicked()

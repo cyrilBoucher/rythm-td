@@ -6,6 +6,7 @@
     {
         price = level * 100;
         name = "Defense power";
+        type = Type.DefensePower;
     }
 
     public override bool Apply(DefenseController defenseController)

@@ -6,6 +6,7 @@
     {
         price = level * 50;
         name = "Defense range";
+        type = Type.DefenseRange;
     }
 
     public override bool Apply(DefenseController defenseController)

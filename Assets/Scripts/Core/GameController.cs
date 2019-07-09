@@ -72,6 +72,7 @@ public class GameController : MonoBehaviour
         }
 
         ResourcesController.Initialize(startResourcesNumber);
+        UpgradesController.Initialize();
     }
 
     void OnEnemyDeath()

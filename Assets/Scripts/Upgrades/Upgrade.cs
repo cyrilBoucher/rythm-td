@@ -8,4 +8,6 @@
 
     public int price;
     public string name;
+    public Type type;
+    public bool bought = false;
 }
