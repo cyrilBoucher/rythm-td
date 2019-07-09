@@ -71,7 +71,7 @@ public class GameController : MonoBehaviour
             }
         }
 
-        ResourcesController.SetResourcesNumber(startResourcesNumber);
+        ResourcesController.Initialize(startResourcesNumber);
     }
 
     void OnEnemyDeath()
