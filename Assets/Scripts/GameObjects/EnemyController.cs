@@ -101,7 +101,10 @@ public class EnemyController : MonoBehaviour, IBeatActor
         Destroy(gameObject);
         Destroy(_lifeBarInstance);
 
-        DeathEvent();
+        if (DeathEvent != null)
+        {
+            DeathEvent();
+        }
     }
 
     public void OnBeat()

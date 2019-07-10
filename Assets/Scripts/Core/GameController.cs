@@ -82,13 +82,22 @@ public class GameController : MonoBehaviour
         if (_enemiesAlive <= 0)
         {
             OutroData.outroState = OutroData.OutroState.Win;
-            SceneManager.LoadSceneAsync("Outro");
+            LoadOutroAndDisable();
         }
     }
 
     void OnBaseDestroyed()
     {
         OutroData.outroState = OutroData.OutroState.Loose;
+        LoadOutroAndDisable();
+    }
+
+    void LoadOutroAndDisable()
+    {
         SceneManager.LoadSceneAsync("Outro");
+
+        // This is to avoid receiving events in the
+        // short time it takes to load the outro scene
+        gameObject.SetActive(false);
     }
 }
