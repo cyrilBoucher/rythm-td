@@ -42,11 +42,11 @@ public class InputDetector
         {
             Vector2 worldInputPos = Camera.main.ScreenToWorldPoint(InputPosition());
 
-            RaycastHit2D hit = Physics2D.Raycast(worldInputPos, -Vector2.up);
+            RaycastHit2D hit = Physics2D.Raycast(worldInputPos, Vector2.zero);
 
             if (hit.collider != null)
             {
-                if (hit.transform.GetComponent<BoxCollider2D>() == collider)
+                if (hit.collider == collider)
                 {
                     _inputPositionOnDownPress = InputPosition();
                     _currentCollider = collider;
