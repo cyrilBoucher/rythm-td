@@ -30,13 +30,10 @@ public class ShopController : MonoBehaviour
             upgradeButton.GetComponent<Button>().onClick.AddListener(delegate { OnDefenseUpgradeButtonClicked(upgradeButton); });
             upgradeButton.SetPrice(upgrade.price);
             upgradeButton.SetName(upgrade.name);
-            upgradeButton.SetBuyable(!upgrade.acquired);
+            upgradeButton.SetAcquired(upgrade.acquired);
             upgradeButton.SetLevel(upgrade.level);
 
-            if (ResourcesController.GetResourcesNumber() < upgrade.price)
-            {
-                upgradeButton.SetBuyable(false);
-            }
+            UpdateUpgradeButtonBuyableStateFromResourcesNumber(upgradeButton);
 
             _upgradeButtonsByType.Add(upgradeButton.upgradeType, upgradeButton);
         }
@@ -63,28 +60,26 @@ public class ShopController : MonoBehaviour
 
         UpgradeButtonController upgradeButton = _upgradeButtonsByType[upgradeType];
 
-        upgradeButton.SetBuyable(!upgrade.acquired);
+        upgradeButton.SetAcquired(upgrade.acquired);
         upgradeButton.SetLevel(upgrade.level);
         upgradeButton.SetPrice(upgrade.price);
 
-        UpdateUpgradeButtonBuyableStateFromResourcesNumber(upgrade, upgradeButton);
+        UpdateUpgradeButtonBuyableStateFromResourcesNumber(upgradeButton);
     }
 
     private void OnResourcesNumberChanged()
     {
         foreach(KeyValuePair<Upgrade.Type, UpgradeButtonController> upgradeButtonByType in _upgradeButtonsByType)
         {
-            Upgrade upgrade = UpgradesController.GetUpgradeFromType(upgradeButtonByType.Key);
-
-            UpdateUpgradeButtonBuyableStateFromResourcesNumber(upgrade, upgradeButtonByType.Value);
+            UpdateUpgradeButtonBuyableStateFromResourcesNumber(upgradeButtonByType.Value);
         }
     }
 
-    private void UpdateUpgradeButtonBuyableStateFromResourcesNumber(Upgrade upgrade, UpgradeButtonController upgradeButton)
+    private void UpdateUpgradeButtonBuyableStateFromResourcesNumber(UpgradeButtonController upgradeButton)
     {
-        if (!upgrade.acquired)
+        if (!upgradeButton.HasBeenAcquired())
         {
-            bool hasEnoughResources = ResourcesController.GetResourcesNumber() >= upgrade.price;
+            bool hasEnoughResources = ResourcesController.GetResourcesNumber() >= upgradeButton.GetPrice();
             upgradeButton.SetBuyable(hasEnoughResources);
         }
     }
