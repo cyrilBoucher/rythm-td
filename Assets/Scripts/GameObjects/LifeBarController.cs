@@ -41,12 +41,6 @@ public class LifeBarController : MonoBehaviour
         _lifeBarFillImage.color = _gradient.Evaluate(1.0f);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void TakeDamage(int damage)
     {
         if (damage == 0)
