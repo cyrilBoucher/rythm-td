@@ -7,6 +7,7 @@ public class UpgradeButtonController : MonoBehaviour
     public Text buttonText;
     public Text priceText;
     public Text levelText;
+    public Text boughtText;
 
     private Button _button;
 
@@ -33,5 +34,7 @@ public class UpgradeButtonController : MonoBehaviour
     public void SetBuyable(bool buyable)
     {
         _button.interactable = buyable;
+
+        boughtText.enabled = !buyable;
     }
 }
