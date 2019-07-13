@@ -12,11 +12,13 @@ public class ShopController : MonoBehaviour
     void OnEnable()
     {
         UpgradesController.UpgradeModified += OnUpgradeModified;
+        ResourcesController.ResourcesNumberChanged += OnResourcesNumberChanged;
     }
 
     void OnDisable()
     {
         UpgradesController.UpgradeModified -= OnUpgradeModified;
+        ResourcesController.ResourcesNumberChanged -= OnResourcesNumberChanged;
     }
 
     void Start()
@@ -64,5 +66,26 @@ public class ShopController : MonoBehaviour
         upgradeButton.SetBuyable(!upgrade.acquired);
         upgradeButton.SetLevel(upgrade.level);
         upgradeButton.SetPrice(upgrade.price);
+
+        UpdateUpgradeButtonBuyableStateFromResourcesNumber(upgrade, upgradeButton);
+    }
+
+    private void OnResourcesNumberChanged()
+    {
+        foreach(KeyValuePair<Upgrade.Type, UpgradeButtonController> upgradeButtonByType in _upgradeButtonsByType)
+        {
+            Upgrade upgrade = UpgradesController.GetUpgradeFromType(upgradeButtonByType.Key);
+
+            UpdateUpgradeButtonBuyableStateFromResourcesNumber(upgrade, upgradeButtonByType.Value);
+        }
+    }
+
+    private void UpdateUpgradeButtonBuyableStateFromResourcesNumber(Upgrade upgrade, UpgradeButtonController upgradeButton)
+    {
+        if (!upgrade.acquired)
+        {
+            bool hasEnoughResources = ResourcesController.GetResourcesNumber() >= upgrade.price;
+            upgradeButton.SetBuyable(hasEnoughResources);
+        }
     }
 }

@@ -2,6 +2,9 @@
 
 public class ResourcesController
 {
+    public delegate void ResourcesNumberChangedAction();
+    public static event ResourcesNumberChangedAction ResourcesNumberChanged;
+
     private static int _resourcesNumber;
     private static bool _initialized = false;
 
@@ -12,12 +15,7 @@ public class ResourcesController
             return;
         }
 
-        if (resourcesNumber < 0)
-        {
-            throw new ArgumentException("Resources number cannot be negative");
-        }
-
-        _resourcesNumber = resourcesNumber;
+        SetResourcesNumber(resourcesNumber);
 
         _initialized = true;
     }
@@ -35,6 +33,8 @@ public class ResourcesController
         }
 
         _resourcesNumber = resourcesNumber;
+
+        FireResourcesNumberChangedEvent();
     }
 
     public static void AddResources(int resourcesNumber)
@@ -45,6 +45,8 @@ public class ResourcesController
         }
 
         _resourcesNumber += resourcesNumber;
+
+        FireResourcesNumberChangedEvent();
     }
 
     public static void TakeResources(int resourcesNumber)
@@ -60,5 +62,15 @@ public class ResourcesController
         }
 
         _resourcesNumber -= resourcesNumber;
+
+        FireResourcesNumberChangedEvent();
+    }
+
+    private static void FireResourcesNumberChangedEvent()
+    {
+        if (ResourcesNumberChanged != null)
+        {
+            ResourcesNumberChanged();
+        }
     }
 }
