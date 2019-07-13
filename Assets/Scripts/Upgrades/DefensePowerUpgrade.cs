@@ -1,12 +1,8 @@
 ﻿public class DefensePowerUpgrade : DefenseUpgrade
 {
-    int level = 1;
-
-    public DefensePowerUpgrade()
+    public DefensePowerUpgrade() :
+        base(startPrice: 100, name: "Defense power", type: Type.DefensePower, maxLevel: 3)
     {
-        price = level * 100;
-        name = "Defense power";
-        type = Type.DefensePower;
     }
 
     public override bool Apply(DefenseController defenseController)
@@ -19,5 +15,10 @@
         defenseController.projectilePower += level;
 
         return true;
+    }
+
+    protected override int ComputePriceFromLevel()
+    {
+        return _startPrice * level;
     }
 }

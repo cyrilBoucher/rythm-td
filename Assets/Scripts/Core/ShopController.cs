@@ -7,6 +7,18 @@ public class ShopController : MonoBehaviour
 {
     public List<UpgradeButtonController> upgradeButtons = new List<UpgradeButtonController>();
 
+    private Dictionary<Upgrade.Type, UpgradeButtonController> _upgradeButtonsByType = new Dictionary<Upgrade.Type, UpgradeButtonController>();
+
+    void OnEnable()
+    {
+        UpgradesController.UpgradeModified += OnUpgradeModified;
+    }
+
+    void OnDisable()
+    {
+        UpgradesController.UpgradeModified -= OnUpgradeModified;
+    }
+
     void Start()
     {
         foreach (UpgradeButtonController upgradeButton in upgradeButtons)
@@ -16,38 +28,41 @@ public class ShopController : MonoBehaviour
             upgradeButton.GetComponent<Button>().onClick.AddListener(delegate { OnDefenseUpgradeButtonClicked(upgradeButton); });
             upgradeButton.SetPrice(upgrade.price);
             upgradeButton.SetName(upgrade.name);
-            upgradeButton.SetBought(upgrade.bought);
-            if (!upgrade.bought &&
-                ResourcesController.GetResourcesNumber() < upgrade.price)
-            {
-                upgradeButton.SetBuyable(false);
-            }
-        }
-    }
+            upgradeButton.SetBuyable(!upgrade.acquired);
+            upgradeButton.SetLevel(upgrade.level);
 
-    // Update is called once per frame
-    void Update()
-    {
-        foreach (UpgradeButtonController upgradeButton in upgradeButtons)
-        {
-            if (!upgradeButton.WasBought() &&
-                ResourcesController.GetResourcesNumber() < upgradeButton.GetPrice())
+            if (ResourcesController.GetResourcesNumber() < upgrade.price)
             {
                 upgradeButton.SetBuyable(false);
             }
+
+            _upgradeButtonsByType.Add(upgradeButton.upgradeType, upgradeButton);
         }
     }
 
     public void OnDefenseUpgradeButtonClicked(UpgradeButtonController upgradeButton)
     {
-        ResourcesController.TakeResources(upgradeButton.GetPrice());
-        upgradeButton.SetBought(true);
-
         UpgradesController.BuyUpgrade(upgradeButton.upgradeType);
     }
 
     public void OnDoneButtonClicked()
     {
         SceneManager.LoadSceneAsync("Outro");
+    }
+
+    private void OnUpgradeModified(Upgrade upgrade)
+    {
+        Upgrade.Type upgradeType = upgrade.type;
+
+        if (!_upgradeButtonsByType.ContainsKey(upgradeType))
+        {
+            throw new MissingReferenceException(string.Format("Missing upgrade of type {0} in ShopController", upgradeType));
+        }
+
+        UpgradeButtonController upgradeButton = _upgradeButtonsByType[upgradeType];
+
+        upgradeButton.SetBuyable(!upgrade.acquired);
+        upgradeButton.SetLevel(upgrade.level);
+        upgradeButton.SetPrice(upgrade.price);
     }
 }

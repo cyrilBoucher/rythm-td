@@ -6,10 +6,9 @@ public class UpgradeButtonController : MonoBehaviour
     public Upgrade.Type upgradeType;
     public Text buttonText;
     public Text priceText;
+    public Text levelText;
 
     private Button _button;
-    private int _price;
-    private bool _bought;
 
     void Awake()
     {
@@ -21,28 +20,14 @@ public class UpgradeButtonController : MonoBehaviour
         buttonText.text = name;
     }
 
+    public void SetLevel(int level)
+    {
+        levelText.text = string.Format("Lvl {0}", level);
+    }
+
     public void SetPrice(int price)
     {
-        _price = price;
-
-        priceText.text = _price.ToString();
-    }
-
-    public int GetPrice()
-    {
-        return _price;
-    }
-
-    public void SetBought(bool bought)
-    {
-        _bought = bought;
-
-        SetBuyable(!_bought);
-    }
-
-    public bool WasBought()
-    {
-        return _bought;
+        priceText.text = price.ToString();
     }
 
     public void SetBuyable(bool buyable)

@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 public class UpgradesController
 {
+    public delegate void UpgradeModifiedAction(Upgrade upgrade);
+    public static event UpgradeModifiedAction UpgradeModified;
+
     private static Dictionary<Upgrade.Type, Upgrade> _availableUpgrades = new Dictionary<Upgrade.Type, Upgrade>();
 
     public static readonly List<DefenseUpgrade> defenseUpgrades = new List<DefenseUpgrade>();
@@ -50,11 +53,28 @@ public class UpgradesController
         }
 
         Upgrade upgrade = _availableUpgrades[upgradeType];
-        upgrade.bought = true;
+
+        if (upgrade.acquired)
+        {
+            throw new UpgradeAlreadyAcquiredException(string.Format("Upgrade of type {0} was already acquired", upgrade.type));
+        }
+
+        ResourcesController.TakeResources(upgrade.price);
+
+        upgrade.AcquireLevel();
 
         if (upgrade is DefenseUpgrade)
         {
-            defenseUpgrades.Add((DefenseUpgrade)upgrade);
+            DefenseUpgrade defenseUpgrade = (DefenseUpgrade)upgrade;
+            if (!defenseUpgrades.Contains(defenseUpgrade))
+            {
+                defenseUpgrades.Add(defenseUpgrade);
+            }
+        }
+
+        if (UpgradeModified != null)
+        {
+            UpgradeModified(upgrade);
         }
     }
 }

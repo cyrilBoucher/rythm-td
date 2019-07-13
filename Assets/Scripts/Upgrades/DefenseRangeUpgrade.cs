@@ -1,12 +1,8 @@
 ﻿public class DefenseRangeUpgrade : DefenseUpgrade
 {
-    int level = 1;
-
-    public DefenseRangeUpgrade()
+    public DefenseRangeUpgrade() :
+        base(startPrice: 50, name: "Defense range", type: Type.DefenseRange, maxLevel: 3)
     {
-        price = level * 50;
-        name = "Defense range";
-        type = Type.DefenseRange;
     }
 
     public override bool Apply(DefenseController defenseController)
@@ -19,5 +15,10 @@
         defenseController.IncreaseRange((float)level);
 
         return true;
+    }
+
+    protected override int ComputePriceFromLevel()
+    {
+        return _startPrice * level;
     }
 }
