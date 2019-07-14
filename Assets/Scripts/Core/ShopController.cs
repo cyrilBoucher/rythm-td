@@ -27,7 +27,7 @@ public class ShopController : MonoBehaviour
         {
             Upgrade upgrade = UpgradesController.GetUpgradeFromType(upgradeButton.upgradeType);
 
-            upgradeButton.GetComponent<Button>().onClick.AddListener(delegate { OnDefenseUpgradeButtonClicked(upgradeButton); });
+            upgradeButton.fillButton.onValidated.AddListener(delegate { OnDefenseUpgradeButtonClicked(upgradeButton); });
             upgradeButton.SetPrice(upgrade.price);
             upgradeButton.SetName(upgrade.name);
             upgradeButton.SetAcquired(upgrade.acquired);

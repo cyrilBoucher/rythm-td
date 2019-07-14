@@ -3,6 +3,8 @@ using UnityEngine.UI;
 
 public class UpgradeButtonController : MonoBehaviour
 {
+    public FillButton fillButton { get; private set; }
+
     public Upgrade.Type upgradeType;
     public Text buttonText;
     public Text priceText;
@@ -15,6 +17,7 @@ public class UpgradeButtonController : MonoBehaviour
     void Awake()
     {
         _button = GetComponent<Button>();
+        fillButton = GetComponent<FillButton>();
     }
 
     public void SetName(string name)
@@ -42,6 +45,8 @@ public class UpgradeButtonController : MonoBehaviour
     public void SetBuyable(bool buyable)
     {
         _button.interactable = buyable;
+
+        fillButton.enabled = buyable;
     }
 
     public void SetAcquired(bool acquired)
