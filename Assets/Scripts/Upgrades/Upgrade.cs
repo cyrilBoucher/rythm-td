@@ -3,7 +3,8 @@
     public enum Type
     {
         DefensePower,
-        DefenseRange
+        DefenseRange,
+        DefenseCooldown
     }
 
     public int price { get; protected set; }

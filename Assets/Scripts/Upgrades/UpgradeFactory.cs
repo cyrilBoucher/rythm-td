@@ -9,6 +9,8 @@
                 return new DefensePowerUpgrade();
             case Upgrade.Type.DefenseRange:
                 return new DefenseRangeUpgrade();
+            case Upgrade.Type.DefenseCooldown:
+                return new DefenseCooldownUpgrade();
         }
     }
 }
