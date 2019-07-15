@@ -12,7 +12,12 @@
             return false;
         }
 
-        defenseController.attackCooldownBeat--;
+        defenseController.attackCooldownBeat -= level;
+
+        if(defenseController.attackCooldownBeat < 1)
+        {
+            defenseController.attackCooldownBeat = 1;
+        }
 
         return true;
     }
