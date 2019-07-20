@@ -14,7 +14,7 @@ public class ProjectileController : MonoBehaviour
         Vector3 direction = enemyTarget.transform.position - transform.position;
         _previousDirection = direction.normalized;
 
-        _speedMetersPerSec = direction.magnitude / (float)BeatEngine.instance.RemainingTimeUntilNextBeatSec();
+        _speedMetersPerSec = 2.0f;//direction.magnitude / (float)BeatEngine.instance.RemainingTimeUntilNextBeatSec();
     }
 
     // Update is called once per frame
