@@ -737,6 +737,8 @@ MonoBehaviour:
     type: 3}
   worldSpaceCanvasPrefab: {fileID: 5050214380146602785, guid: 7812507d594ba3a4f82da6fad958af6d,
     type: 3}
+  timeAchievementMinutes: 2
+  resourcesAchievement: 40
   loadMap: 1
 --- !u!4 &1781849702
 Transform:

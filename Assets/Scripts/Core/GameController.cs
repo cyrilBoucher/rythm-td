@@ -12,21 +12,28 @@ public class GameController : MonoBehaviour
     public GameObject playerBaseGameObject;
     public GameObject resourcesMinePrefab;
     public GameObject worldSpaceCanvasPrefab;
+    public float timeAchievementMinutes;
+    public int resourcesAchievement;
+
     public bool loadMap = true;
     static public GameObject worldSpaceCanvasInstance;
 
     private int _enemiesAlive;
+    private float _timeToBeatLevel;
+    private int _usedResources;
 
     void OnEnable()
     {
         EnemyController.DeathEvent += OnEnemyDeath;
         BaseController.DestroyedEvent += OnBaseDestroyed;
+        ResourcesController.ResourcesTaken += OnResourcesTaken;
     }
 
     void OnDisable()
     {
         EnemyController.DeathEvent -= OnEnemyDeath;
         BaseController.DestroyedEvent -= OnBaseDestroyed;
+        ResourcesController.ResourcesTaken -= OnResourcesTaken;
     }
 
     void Awake()
@@ -71,8 +78,11 @@ public class GameController : MonoBehaviour
             }
         }
 
+        SkillPointsController.Initialize(0);
         ResourcesController.Initialize(startResourcesNumber);
         UpgradesController.Initialize();
+
+        _timeToBeatLevel = Time.time;
     }
 
     void OnEnemyDeath()
@@ -82,7 +92,13 @@ public class GameController : MonoBehaviour
         if (_enemiesAlive <= 0)
         {
             OutroData.outroState = OutroData.OutroState.Win;
-            LoadOutroAndDisable();
+
+            LevelWonSceneController.timeToBeatLevelSeconds = Time.time - _timeToBeatLevel;
+            LevelWonSceneController.timeAchivementMinutes = timeAchievementMinutes;
+            LevelWonSceneController.resourcesUsed = _usedResources;
+            LevelWonSceneController.resourcesUsedAchievement = resourcesAchievement;
+
+            LoadLevelWonAndDisable();
         }
     }
 
@@ -92,9 +108,23 @@ public class GameController : MonoBehaviour
         LoadOutroAndDisable();
     }
 
+    void OnResourcesTaken(int resourcesTaken)
+    {
+        _usedResources += resourcesTaken;
+    }
+
     void LoadOutroAndDisable()
     {
         SceneManager.LoadSceneAsync("Outro");
+
+        // This is to avoid receiving events in the
+        // short time it takes to load the outro scene
+        gameObject.SetActive(false);
+    }
+
+    void LoadLevelWonAndDisable()
+    {
+        SceneManager.LoadSceneAsync("LevelWon", LoadSceneMode.Additive);
 
         // This is to avoid receiving events in the
         // short time it takes to load the outro scene

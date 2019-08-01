@@ -5,6 +5,9 @@ public class ResourcesController
     public delegate void ResourcesNumberChangedAction();
     public static event ResourcesNumberChangedAction ResourcesNumberChanged;
 
+    public delegate void ResourcesTakenAction(int resourcesTaken);
+    public static event ResourcesTakenAction ResourcesTaken;
+
     private static int _resourcesNumber;
     private static bool _initialized = false;
 
@@ -58,10 +61,15 @@ public class ResourcesController
 
         if (resourcesNumber > _resourcesNumber)
         {
-            throw new NotEnoughResourcesException(string.Format("Cannot take {0} as there is only {1} remaining", resourcesNumber, _resourcesNumber));
+            throw new NotEnoughResourcesException(string.Format("Cannot take {0} resources as there is only {1} remaining", resourcesNumber, _resourcesNumber));
         }
 
         _resourcesNumber -= resourcesNumber;
+
+        if (ResourcesTaken != null)
+        {
+            ResourcesTaken(resourcesNumber);
+        }
 
         FireResourcesNumberChangedEvent();
     }
