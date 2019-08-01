@@ -59,7 +59,7 @@ public class UpgradesController
             throw new UpgradeAlreadyAcquiredException(string.Format("Upgrade of type {0} was already acquired", upgrade.type));
         }
 
-        ResourcesController.TakeResources(upgrade.price);
+        SkillPointsController.TakeSkillPoints(upgrade.price);
 
         upgrade.AcquireLevel();
 

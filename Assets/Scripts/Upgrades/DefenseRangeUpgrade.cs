@@ -1,7 +1,7 @@
 ﻿public class DefenseRangeUpgrade : DefenseUpgrade
 {
     public DefenseRangeUpgrade() :
-        base(startPrice: 50, name: "Defense range", type: Type.DefenseRange, maxLevel: 3)
+        base(startPrice: 1, name: "Defense range", type: Type.DefenseRange, maxLevel: 3)
     {
     }
 

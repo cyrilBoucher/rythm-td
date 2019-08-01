@@ -1,7 +1,7 @@
 ﻿public class DefensePowerUpgrade : DefenseUpgrade
 {
     public DefensePowerUpgrade() :
-        base(startPrice: 100, name: "Defense power", type: Type.DefensePower, maxLevel: 3)
+        base(startPrice: 1, name: "Defense power", type: Type.DefensePower, maxLevel: 3)
     {
     }
 

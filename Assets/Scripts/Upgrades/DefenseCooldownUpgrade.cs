@@ -1,7 +1,7 @@
 ﻿public class DefenseCooldownUpgrade : DefenseUpgrade
 {
     public DefenseCooldownUpgrade() :
-        base(60, "Defense cooldown", Upgrade.Type.DefenseCooldown, 2)
+        base(startPrice: 2, name: "Defense cooldown", type: Upgrade.Type.DefenseCooldown, maxLevel: 2)
     {
     }
 
