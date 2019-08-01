@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class BeatPatternButton : MonoBehaviour
+public class BeatPatternButton : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     private class BeatPatternResolutionData
     {
@@ -19,6 +20,8 @@ public class BeatPatternButton : MonoBehaviour
     // an event thrown while we go through the dictionnary
     private List<BeatPattern> _patternsToRemove = new List<BeatPattern>();
 
+    private BeatPattern.Input _currentInput = BeatPattern.Input.Skip;
+
     void Awake()
     {
         _collider = GetComponent<BoxCollider2D>();
@@ -32,10 +35,14 @@ public class BeatPatternButton : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        BeatPattern.Input input = InputDetector.CheckForInput(_collider);
         foreach (BeatPatternResolutionData resolutionData in _resolutionDatas.Values)
         {
-            BeatPatternResolver.ReturnType result = resolutionData.beatPatternResolver.Run2(input);
+            BeatPatternResolver.ReturnType result = resolutionData.beatPatternResolver.Run2(_currentInput);
+        }
+
+        if (_currentInput != BeatPattern.Input.Skip)
+        {
+            _currentInput = BeatPattern.Input.Skip;
         }
 
         if (_patternsToRemove.Count == 0)
@@ -99,4 +106,47 @@ public class BeatPatternButton : MonoBehaviour
             _collider = GetComponent<BoxCollider2D>();
         }
     }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        _currentInput = BeatPattern.Input.Tap;
+    }
+
+    public void OnBeginDrag(PointerEventData eventData) { /* Needed for OnEndDrag to be called */ }
+
+    public void OnDrag(PointerEventData eventData) { /* Needed for OnEndDrag to be called */ }
+
+    public void OnEndDrag(PointerEventData eventData)
+    {
+        Vector2 dragDirection = eventData.position - eventData.pressPosition;
+        dragDirection.Normalize();
+
+        float absoluteX = Mathf.Abs(dragDirection.x);
+        float absoluteY = Mathf.Abs(dragDirection.y);
+
+        if (absoluteX > absoluteY)
+        {
+            if (dragDirection.x > 0.0f)
+            {
+                _currentInput = BeatPattern.Input.SlideRight;
+            }
+            else
+            {
+                _currentInput = BeatPattern.Input.SlideLeft;
+            }
+        }
+        else
+        {
+            if (dragDirection.y > 0.0f)
+            {
+                _currentInput = BeatPattern.Input.SlideUp;
+            }
+            else
+            {
+                _currentInput = BeatPattern.Input.SlideDown;
+            }
+        }
+
+    }
+
 }

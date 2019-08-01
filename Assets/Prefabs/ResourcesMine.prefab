@@ -94,7 +94,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0be86ec082c986b4093da25b09fcc3d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resourcesController: {fileID: 0}
   inputFeedbackTextPrefab: {fileID: 302928808805573940, guid: afa3575a47468ea48bccc282af401c37,
     type: 3}
   resourcesNumber: 20
