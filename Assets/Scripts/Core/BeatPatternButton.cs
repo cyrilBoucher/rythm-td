@@ -14,23 +14,12 @@ public class BeatPatternButton : MonoBehaviour, IPointerClickHandler, IBeginDrag
     }
 
     private Dictionary<BeatPattern, BeatPatternResolutionData> _resolutionDatas = new Dictionary<BeatPattern, BeatPatternResolutionData>();
-    private BoxCollider2D _collider;
 
     // Not the best but needed in case RemovePattern is called during
     // an event thrown while we go through the dictionnary
     private List<BeatPattern> _patternsToRemove = new List<BeatPattern>();
 
     private BeatPattern.Input _currentInput = BeatPattern.Input.Skip;
-
-    void Awake()
-    {
-        _collider = GetComponent<BoxCollider2D>();
-
-        if (_collider == null)
-        {
-            throw new NullReferenceException("Game object which would like to act on beat pattern resolution need a BoxCollider2D attached");
-        }
-    }
 
     // Update is called once per frame
     void Update()
@@ -97,14 +86,6 @@ public class BeatPatternButton : MonoBehaviour, IPointerClickHandler, IBeginDrag
         resolutionData.beatPatternResolver.InputEvent -= resolutionData.onInputFunction;
 
         _patternsToRemove.Add(pattern);
-    }
-
-    void Reset()
-    {
-        if (_collider == null)
-        {
-            _collider = GetComponent<BoxCollider2D>();
-        }
     }
 
     public void OnPointerClick(PointerEventData eventData)
