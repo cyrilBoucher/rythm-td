@@ -17,16 +17,16 @@ public class ResourcesCounter : MonoBehaviour
 
     void Start()
     {
-        SetResourcesNumber(ResourcesController.GetResourcesNumber());
+        SetResourcesNumber(ResourcesController.Instance.resourcesNumber);
     }
 
     void OnResourcesNumberChanged()
     {
-        SetResourcesNumber(ResourcesController.GetResourcesNumber());
+        SetResourcesNumber(ResourcesController.Instance.resourcesNumber);
     }
 
     void SetResourcesNumber(int resourcesNumber)
     {
-        resourcesText.text = ResourcesController.GetResourcesNumber().ToString();
+        resourcesText.text = ResourcesController.Instance.resourcesNumber.ToString();
     }
 }

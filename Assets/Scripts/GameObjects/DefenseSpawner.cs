@@ -31,7 +31,7 @@ public class DefenseSpawner : MonoBehaviour
     {
         DefenseController defenseController = defensePrefab.GetComponent<DefenseController>();
 
-        if (ResourcesController.GetResourcesNumber() < defenseController.price)
+        if (ResourcesController.Instance.resourcesNumber < defenseController.price)
         {
             _inputFeedbackTextController.ShowFeedback("Not enough resources!");
 
@@ -39,7 +39,7 @@ public class DefenseSpawner : MonoBehaviour
         }
 
         Instantiate(defensePrefab, transform.position, Quaternion.identity);
-        ResourcesController.TakeResources(defenseController.price);
+        ResourcesController.Instance.TakeResources(defenseController.price);
 
         _beatPatternButton.RemovePattern(_beatPattern);
 

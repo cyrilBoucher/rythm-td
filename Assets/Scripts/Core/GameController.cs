@@ -36,6 +36,11 @@ public class GameController : MonoBehaviour
         ResourcesController.ResourcesTaken -= OnResourcesTaken;
     }
 
+    void OnDestroy()
+    {
+        ResourcesController.Destroy();
+    }
+
     void Awake()
     {
         if (loadMap)
@@ -79,7 +84,7 @@ public class GameController : MonoBehaviour
         }
 
         SkillPointsController.Initialize(0);
-        ResourcesController.Initialize(startResourcesNumber);
+        ResourcesController.Instance.Initialize(startResourcesNumber);
         UpgradesController.Initialize();
 
         _timeToBeatLevel = Time.time;

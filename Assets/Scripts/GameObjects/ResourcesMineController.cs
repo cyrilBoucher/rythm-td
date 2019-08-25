@@ -35,7 +35,7 @@ public class ResourcesMineController : MonoBehaviour
             return;
         }
 
-        ResourcesController.AddResources(1);
+        ResourcesController.Instance.AddResources(1);
         resourcesNumber--;
 
         _inputFeedbackTextController.ShowFeedback(BeatPatternResolver.EnumToString(BeatPatternResolver.ReturnType.Good));

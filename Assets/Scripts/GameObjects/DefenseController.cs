@@ -163,9 +163,9 @@ public class DefenseController : MonoBehaviour, IBeatActor
         {
             DefenseController upgradedDefenseController = upgradedDefensePrefab.GetComponent<DefenseController>();
             int priceForUpgrade = upgradedDefenseController.price - price;
-            if (ResourcesController.GetResourcesNumber() >= priceForUpgrade)
+            if (ResourcesController.Instance.resourcesNumber >= priceForUpgrade)
             {
-                ResourcesController.TakeResources(priceForUpgrade);
+                ResourcesController.Instance.TakeResources(priceForUpgrade);
 
                 Instantiate(upgradedDefensePrefab, transform.position, Quaternion.identity);
 
@@ -191,7 +191,7 @@ public class DefenseController : MonoBehaviour, IBeatActor
             DefenseController downgradedDefenseController = downgradedDefensePrefab.GetComponent<DefenseController>();
 
             int earnedResourcesForDowngrade = (price - downgradedDefenseController.price) / 2;
-            ResourcesController.AddResources(downgradedDefenseController.price);
+            ResourcesController.Instance.AddResources(downgradedDefenseController.price);
 
             Instantiate(downgradedDefensePrefab, transform.position, Quaternion.identity);
 
@@ -208,7 +208,7 @@ public class DefenseController : MonoBehaviour, IBeatActor
     void OnSellBeatPatternResolved()
     {
         int earnedResourcesForSelling = price / 2;
-        ResourcesController.AddResources(earnedResourcesForSelling);
+        ResourcesController.Instance.AddResources(earnedResourcesForSelling);
 
         Instantiate(defenseSpawnerPrefab, transform.position, Quaternion.identity);
 

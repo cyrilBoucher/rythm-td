@@ -90,7 +90,7 @@ public class EnemyController : MonoBehaviour, IBeatActor
 
         if (life <= 0)
         {
-            ResourcesController.AddResources(reward);
+            ResourcesController.Instance.AddResources(reward);
 
             Death();
         }

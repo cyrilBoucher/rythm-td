@@ -8,10 +8,26 @@ public class ResourcesController
     public delegate void ResourcesTakenAction(int resourcesTaken);
     public static event ResourcesTakenAction ResourcesTaken;
 
-    private static int _resourcesNumber;
-    private static bool _initialized = false;
+    public int resourcesNumber { get; private set; }
 
-    public static void Initialize(int resourcesNumber)
+    public static ResourcesController Instance
+    {
+        get
+        {
+            if (_instance == null)
+            {
+                _instance = new ResourcesController();
+            }
+
+            return _instance;
+        }
+    }
+
+    private static ResourcesController _instance;
+
+    private bool _initialized = false;
+
+    public void Initialize(int resourcesNumber)
     {
         if (_initialized)
         {
@@ -23,62 +39,50 @@ public class ResourcesController
         _initialized = true;
     }
 
-    public static int GetResourcesNumber()
+    public static void Destroy()
     {
-        return _resourcesNumber;
+        _instance = null;
     }
 
-    public static void SetResourcesNumber(int resourcesNumber)
+    private void SetResourcesNumber(int resourcesNumber)
     {
         if (resourcesNumber < 0)
         {
             throw new ArgumentException("Resources number cannot be negative");
         }
 
-        _resourcesNumber = resourcesNumber;
+        this.resourcesNumber = resourcesNumber;
 
-        FireResourcesNumberChangedEvent();
+        ResourcesNumberChanged?.Invoke();
     }
 
-    public static void AddResources(int resourcesNumber)
+    public void AddResources(int resourcesNumber)
     {
         if (resourcesNumber < 0)
         {
             throw new ArgumentException("Resources number cannot be negative");
         }
 
-        _resourcesNumber += resourcesNumber;
+        this.resourcesNumber += resourcesNumber;
 
-        FireResourcesNumberChangedEvent();
+        ResourcesNumberChanged?.Invoke();
     }
 
-    public static void TakeResources(int resourcesNumber)
+    public void TakeResources(int resourcesNumber)
     {
         if (resourcesNumber < 0)
         {
             throw new ArgumentException("Resources number cannot be negative");
         }
 
-        if (resourcesNumber > _resourcesNumber)
+        if (resourcesNumber > this.resourcesNumber)
         {
-            throw new NotEnoughResourcesException(string.Format("Cannot take {0} resources as there is only {1} remaining", resourcesNumber, _resourcesNumber));
+            throw new NotEnoughResourcesException(string.Format("Cannot take {0} resources as there is only {1} remaining", resourcesNumber, this.resourcesNumber));
         }
 
-        _resourcesNumber -= resourcesNumber;
+        this.resourcesNumber -= resourcesNumber;
 
-        if (ResourcesTaken != null)
-        {
-            ResourcesTaken(resourcesNumber);
-        }
-
-        FireResourcesNumberChangedEvent();
-    }
-
-    private static void FireResourcesNumberChangedEvent()
-    {
-        if (ResourcesNumberChanged != null)
-        {
-            ResourcesNumberChanged();
-        }
+        ResourcesTaken?.Invoke(resourcesNumber);
+        ResourcesNumberChanged?.Invoke();
     }
 }
