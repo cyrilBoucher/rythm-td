@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class LevelWonSceneController : MonoBehaviour
@@ -69,5 +70,15 @@ public class LevelWonSceneController : MonoBehaviour
         SkillPointsController.AddSkillPoints(skillPointsEarned);
 
         return skillPointsEarned;
+    }
+
+    public void OnShopButtonClicked()
+    {
+        SceneManager.LoadSceneAsync("Shop");
+    }
+
+    public void OnRestartButtonClicked()
+    {
+        SceneManager.LoadSceneAsync("SampleScene");
     }
 }

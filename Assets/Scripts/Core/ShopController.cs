@@ -45,7 +45,7 @@ public class ShopController : MonoBehaviour
 
     public void OnDoneButtonClicked()
     {
-        SceneManager.LoadSceneAsync("Outro");
+        SceneManager.LoadSceneAsync("SampleScene");
     }
 
     private void OnUpgradeModified(Upgrade upgrade)
