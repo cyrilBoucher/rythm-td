@@ -45,7 +45,14 @@ public class GameController : MonoBehaviour
     {
         if (loadMap)
         {
-            Map.LoadMap(mapResourceName);
+            if (!string.IsNullOrEmpty(mapResourceName))
+            {
+                Map.LoadMap(mapResourceName);
+            }
+            else
+            {
+                Map.LoadMap(LevelSelectController.selectedLevel.levelName);
+            }
 
             // Make sure we see all the map
             // -10 is used as z to see elements usually positioned at z = 0

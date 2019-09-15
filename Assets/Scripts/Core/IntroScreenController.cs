@@ -17,6 +17,6 @@ public class IntroScreenController : MonoBehaviour
 
     public void OnStartButtonClicked()
     {
-        SceneManager.LoadSceneAsync("SampleScene");
+        SceneManager.LoadSceneAsync("LevelSelect");
     }
 }
