@@ -3,8 +3,10 @@ using UnityEngine.UI;
 
 public class SkillPointsCounter : MonoBehaviour
 {
+#pragma warning disable CS0649
     [SerializeField]
     private Text skillPointsNumberText;
+#pragma warning restore CS0649
 
     void OnEnable()
     {
