@@ -36,7 +36,3 @@ sysinfo.txt
 .gradle/
 *.apk
 *.unitypackage
-
-# Orig files
-*.cs.orig
-*.cs.orig.meta
