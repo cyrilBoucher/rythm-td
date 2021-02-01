@@ -30,7 +30,7 @@ public class SkillPointsController
 
         skillPoints = skillPointsNumber;
 
-        FireSkillPointsNumberChangedEvent();
+        SkillPointsNumberChanged?.Invoke();
     }
 
     public static void AddSkillPoints(int skillPointsNumber)
@@ -42,7 +42,7 @@ public class SkillPointsController
 
         skillPoints += skillPointsNumber;
 
-        FireSkillPointsNumberChangedEvent();
+        SkillPointsNumberChanged?.Invoke();
     }
 
     public static void TakeSkillPoints(int skillPointsNumber)
@@ -59,14 +59,6 @@ public class SkillPointsController
 
         skillPoints -= skillPointsNumber;
 
-        FireSkillPointsNumberChangedEvent();
-    }
-
-    private static void FireSkillPointsNumberChangedEvent()
-    {
-        if (SkillPointsNumberChanged != null)
-        {
-            SkillPointsNumberChanged();
-        }
+        SkillPointsNumberChanged?.Invoke();
     }
 }
