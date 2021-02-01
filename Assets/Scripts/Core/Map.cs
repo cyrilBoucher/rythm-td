@@ -15,7 +15,7 @@ public class Map
     private static string _mapResourceName;
     private const string WrongMapFormatErrorMessage = "Wrong format used in {0}";
 
-    public static bool LoadMap(String mapResourceName)
+    public static bool LoadMap(string mapResourceName)
     {
         YamlDotNet.Serialization.Deserializer deserializer = new YamlDotNet.Serialization.DeserializerBuilder().Build();
 
@@ -23,14 +23,14 @@ public class Map
 
         if (textAsset == null)
         {
-            Debug.LogError(String.Format("Could not find any text asset with the name {0}", mapResourceName));
+            Debug.LogError(string.Format("Could not find any text asset with the name {0}", mapResourceName));
 
             return false;
         }
 
         _mapResourceName = mapResourceName;
 
-        Dictionary<String, List<int[]>> parsed = deserializer.Deserialize<Dictionary<String, List<int[]>>>(textAsset.text);
+        Dictionary<string, List<int[]>> parsed = deserializer.Deserialize<Dictionary<string, List<int[]>>>(textAsset.text);
 
         if (!DeserializeMapDimensions(parsed))
         {
@@ -60,13 +60,13 @@ public class Map
         return DeserializeEnemyRoute(parsed);
     }
 
-    static private bool DeserializeMapDimensions(Dictionary<String, List<int[]>> deserializedMapData)
+    static private bool DeserializeMapDimensions(Dictionary<string, List<int[]>> deserializedMapData)
     {
         List<int[]> deserializedMapDimensions = deserializedMapData["Layout_dims"];
 
         if (deserializedMapDimensions.Count != 1)
         {
-            Debug.LogError(String.Format(WrongMapFormatErrorMessage, _mapResourceName));
+            Debug.LogError(string.Format(WrongMapFormatErrorMessage, _mapResourceName));
 
             return false;
         }
@@ -75,7 +75,7 @@ public class Map
 
         if (deserializedMapDimensionsVector2.Length != 2)
         {
-            Debug.LogError(String.Format(WrongMapFormatErrorMessage, _mapResourceName));
+            Debug.LogError(string.Format(WrongMapFormatErrorMessage, _mapResourceName));
 
             return false;
         }
@@ -85,13 +85,13 @@ public class Map
         return true;
     }
 
-    static private bool DeserializePlayerBasePosition(Dictionary<String, List<int[]>> deserializedMapData)
+    static private bool DeserializePlayerBasePosition(Dictionary<string, List<int[]>> deserializedMapData)
     {
         List<int[]> deserializedBasePosition = deserializedMapData["playerBase"];
 
         if (deserializedBasePosition.Count != 1)
         {
-            Debug.LogError(String.Format(WrongMapFormatErrorMessage, _mapResourceName));
+            Debug.LogError(string.Format(WrongMapFormatErrorMessage, _mapResourceName));
 
             return false;
         }
@@ -100,7 +100,7 @@ public class Map
 
         if (deserializedBasePositionVector2.Length != 2)
         {
-            Debug.LogError(String.Format(WrongMapFormatErrorMessage, _mapResourceName));
+            Debug.LogError(string.Format(WrongMapFormatErrorMessage, _mapResourceName));
 
             return false;
         }
@@ -110,13 +110,13 @@ public class Map
         return true;
     }
 
-    static private bool DeserializeEnemySpawnPosition(Dictionary<String, List<int[]>> deserializedMapData)
+    static private bool DeserializeEnemySpawnPosition(Dictionary<string, List<int[]>> deserializedMapData)
     {
         List<int[]> deserializedSpawnPosition = deserializedMapData["enemySpawn"];
 
         if (deserializedSpawnPosition.Count != 1)
         {
-            Debug.LogError(String.Format(WrongMapFormatErrorMessage, _mapResourceName));
+            Debug.LogError(string.Format(WrongMapFormatErrorMessage, _mapResourceName));
 
             return false;
         }
@@ -125,7 +125,7 @@ public class Map
 
         if (deserializedSpawnPositionVector2.Length != 2)
         {
-            Debug.LogError(String.Format(WrongMapFormatErrorMessage, _mapResourceName));
+            Debug.LogError(string.Format(WrongMapFormatErrorMessage, _mapResourceName));
 
             return false;
         }
@@ -135,7 +135,7 @@ public class Map
         return true;
     }
 
-    static private bool DeserializeDefenseSpawnPositions(Dictionary<String, List<int[]>> deserializedMapData)
+    static private bool DeserializeDefenseSpawnPositions(Dictionary<string, List<int[]>> deserializedMapData)
     {
         List<int[]> deserializedDefenseSpawnPositions = deserializedMapData["defenseSpawn"];
 
@@ -145,7 +145,7 @@ public class Map
         {
             if (deserializedEnemyRoutePositionVector2.Length != 2)
             {
-                Debug.LogError(String.Format(WrongMapFormatErrorMessage, _mapResourceName));
+                Debug.LogError(string.Format(WrongMapFormatErrorMessage, _mapResourceName));
 
                 return false;
             }
@@ -156,7 +156,7 @@ public class Map
         return true;
     }
 
-    static private bool DeserializeResourcesMinePositions(Dictionary<String, List<int[]>> deserializedMapData)
+    static private bool DeserializeResourcesMinePositions(Dictionary<string, List<int[]>> deserializedMapData)
     {
         List<int[]> deserializedResourcesMinePositions = deserializedMapData["resourcesMine"];
 
@@ -166,7 +166,7 @@ public class Map
         {
             if (deserializedResourcesMinePositionVector2.Length != 2)
             {
-                Debug.LogError(String.Format(WrongMapFormatErrorMessage, _mapResourceName));
+                Debug.LogError(string.Format(WrongMapFormatErrorMessage, _mapResourceName));
 
                 return false;
             }
@@ -177,7 +177,7 @@ public class Map
         return true;
     }
 
-    static private bool DeserializeEnemyRoute(Dictionary<String, List<int[]>> deserializedMapData)
+    static private bool DeserializeEnemyRoute(Dictionary<string, List<int[]>> deserializedMapData)
     {
         enemyRoute = new EnemyRoute();
 
@@ -188,7 +188,7 @@ public class Map
         {
             if (deserializedEnemyRoutePositionVector3.Length != 2)
             {
-                Debug.LogError(String.Format(WrongMapFormatErrorMessage, _mapResourceName));
+                Debug.LogError(string.Format(WrongMapFormatErrorMessage, _mapResourceName));
 
                 return false;
             }
