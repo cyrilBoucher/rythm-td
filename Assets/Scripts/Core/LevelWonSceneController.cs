@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -55,19 +53,35 @@ public class LevelWonSceneController : MonoBehaviour
 
     int EarnSkillPoints()
     {
-        int skillPointsEarned = 1;
+        string currentLevel = LevelSelectController.selectedLevelName;
 
-        if (timeToBeatLevelSeconds <= (timeAchivementMinutes * 60.0f))
+        int skillPointsEarned = 0;
+
+        if (!Player.Instance.BeatLevels.ContainsKey(currentLevel))
+        {
+            skillPointsEarned++;
+
+            Player.Instance.AddBeatenLevel(currentLevel);
+        }
+
+        // TO DO: Find a better way than using Tuple
+        // This is very awkward to use in such cases
+        bool timeAchievementObtained = timeToBeatLevelSeconds <= (timeAchivementMinutes * 60.0f);
+        if (!Player.Instance.BeatLevels[currentLevel].timeAchievementObtained &&
+            timeAchievementObtained)
         {
             skillPointsEarned++;
         }
 
-        if (resourcesUsed <= resourcesUsedAchievement)
+        bool resourcesAchievementObtained = resourcesUsed <= resourcesUsedAchievement;
+        if (!Player.Instance.BeatLevels[currentLevel].resourcesAchievementObtained &&
+            resourcesAchievementObtained)
         {
             skillPointsEarned++;
         }
 
-        SkillPointsController.AddSkillPoints(skillPointsEarned);
+        Player.Instance.SetBeatenLevelAchievements(currentLevel, timeAchievementObtained, resourcesAchievementObtained);
+        Player.Instance.AddSkillPoints(skillPointsEarned);
 
         return skillPointsEarned;
     }
@@ -79,6 +93,6 @@ public class LevelWonSceneController : MonoBehaviour
 
     public void OnRestartButtonClicked()
     {
-        SceneManager.LoadSceneAsync("SampleScene");
+        SceneManager.LoadSceneAsync("Level");
     }
 }

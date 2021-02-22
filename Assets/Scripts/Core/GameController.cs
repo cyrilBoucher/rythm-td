@@ -51,7 +51,7 @@ public class GameController : MonoBehaviour
             }
             else
             {
-                Map.LoadMap(LevelSelectController.selectedLevel.levelName);
+                Map.LoadMap(LevelSelectController.selectedLevelName);
             }
 
             // Make sure we see all the map
@@ -90,7 +90,6 @@ public class GameController : MonoBehaviour
             }
         }
 
-        SkillPointsController.Initialize(0);
         ResourcesController.Instance.Initialize(startResourcesNumber);
         UpgradesController.Initialize();
 

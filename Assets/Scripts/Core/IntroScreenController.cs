@@ -6,7 +6,7 @@ public class IntroScreenController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        Player.Instance.LoadOrCreateFile();
     }
 
     // Update is called once per frame

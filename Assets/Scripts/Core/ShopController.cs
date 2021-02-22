@@ -11,13 +11,13 @@ public class ShopController : MonoBehaviour
     void OnEnable()
     {
         UpgradesController.UpgradeModified += OnUpgradeModified;
-        SkillPointsController.SkillPointsNumberChanged += OnSkillPointsNumberChanged;
+        Player.Instance.SkillPointsNumberChanged += OnSkillPointsNumberChanged;
     }
 
     void OnDisable()
     {
         UpgradesController.UpgradeModified -= OnUpgradeModified;
-        SkillPointsController.SkillPointsNumberChanged -= OnSkillPointsNumberChanged;
+        Player.Instance.SkillPointsNumberChanged -= OnSkillPointsNumberChanged;
     }
 
     void Start()
@@ -45,7 +45,7 @@ public class ShopController : MonoBehaviour
 
     public void OnDoneButtonClicked()
     {
-        SceneManager.LoadSceneAsync("SampleScene");
+        SceneManager.LoadSceneAsync("LevelSelect");
     }
 
     private void OnUpgradeModified(Upgrade upgrade)
@@ -83,7 +83,7 @@ public class ShopController : MonoBehaviour
             return;
         }
 
-        bool hasEnoughSkillPoints = SkillPointsController.skillPoints >= upgradeButton.GetPrice();
+        bool hasEnoughSkillPoints = Player.Instance.SkillPoints >= upgradeButton.GetPrice();
         upgradeButton.SetBuyable(hasEnoughSkillPoints);
     }
 }

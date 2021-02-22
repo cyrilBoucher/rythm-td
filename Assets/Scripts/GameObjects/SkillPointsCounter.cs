@@ -10,26 +10,26 @@ public class SkillPointsCounter : MonoBehaviour
 
     void OnEnable()
     {
-        SkillPointsController.SkillPointsNumberChanged += OnSkillPointsNumberChanged;
+        Player.Instance.SkillPointsNumberChanged += OnSkillPointsNumberChanged;
     }
 
     void OnDisable()
     {
-        SkillPointsController.SkillPointsNumberChanged -= OnSkillPointsNumberChanged;
+        Player.Instance.SkillPointsNumberChanged -= OnSkillPointsNumberChanged;
     }
 
     void Start()
     {
-        SetSkillPointsNumber(SkillPointsController.skillPoints);
+        SetSkillPointsNumber(Player.Instance.SkillPoints);
     }
 
     void OnSkillPointsNumberChanged()
     {
-        SetSkillPointsNumber(SkillPointsController.skillPoints);
+        SetSkillPointsNumber(Player.Instance.SkillPoints);
     }
 
-    void SetSkillPointsNumber(int resourcesNumber)
+    void SetSkillPointsNumber(int skillPointsNumber)
     {
-        skillPointsNumberText.text = SkillPointsController.skillPoints.ToString();
+        skillPointsNumberText.text = skillPointsNumber.ToString();
     }
 }

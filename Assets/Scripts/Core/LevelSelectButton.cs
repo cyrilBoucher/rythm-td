@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class LevelSelectButton : MonoBehaviour
@@ -7,26 +8,20 @@ public class LevelSelectButton : MonoBehaviour
     public Image resourcesAchievementHint;
     public Image timeAchievementHint;
 
-    private LevelData _levelData;
-    private Button _button;
-
-    private void Awake()
-    {
-        _levelData = LevelController.Instance.GetLevelData(levelName);
-
-        _button = GetComponent<Button>();
-    }
-
     private void Start()
     {
-        _button.interactable = !_levelData.locked;
+        LevelData currentLevelData = new LevelData();
+        if (Player.Instance.BeatLevels.ContainsKey(levelName))
+        {
+            currentLevelData = Player.Instance.BeatLevels[levelName];
+        }
 
-        if (!_levelData.resourcesAchievementObtained)
+        if (!currentLevelData.resourcesAchievementObtained)
         {
             resourcesAchievementHint.color = new Color(0.3f, 0.3f, 0.3f, 0.7f);
         }
 
-        if (!_levelData.timeAchievementObtained)
+        if (!currentLevelData.timeAchievementObtained)
         {
             timeAchievementHint.color = new Color(0.3f, 0.3f, 0.3f, 0.7f);
         }
@@ -34,6 +29,6 @@ public class LevelSelectButton : MonoBehaviour
 
     public void OnButtonClicked()
     {
-        LevelSelectController.selectedLevel = _levelData;
+        LevelSelectController.selectedLevelName = levelName;
     }
 }

@@ -24,6 +24,11 @@ public class UpgradesController
             _availableUpgrades.Add(type, UpgradeFactory.CreateUpgrade(type));
         }
 
+        foreach (KeyValuePair<Upgrade.Type, int> upgradeLevelByUpgradeType in Player.Instance.Upgrades)
+        {
+            _availableUpgrades[upgradeLevelByUpgradeType.Key].Init(upgradeLevelByUpgradeType.Value);
+        }
+
         _initialized = true;
     }
 
@@ -59,7 +64,9 @@ public class UpgradesController
             throw new UpgradeAlreadyAcquiredException(string.Format("Upgrade of type {0} was already acquired", upgrade.type));
         }
 
-        SkillPointsController.TakeSkillPoints(upgrade.price);
+        Player.Instance.TakeSkillPoints(upgrade.price);
+
+        Player.Instance.BuyUpgrade(upgrade.type, upgrade.level);
 
         upgrade.AcquireLevel();
 
@@ -72,9 +79,6 @@ public class UpgradesController
             }
         }
 
-        if (UpgradeModified != null)
-        {
-            UpgradeModified(upgrade);
-        }
+        UpgradeModified?.Invoke(upgrade);
     }
 }

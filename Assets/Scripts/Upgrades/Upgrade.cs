@@ -28,6 +28,19 @@
         this.type = type;
     }
 
+    public void Init(int level)
+    {
+        this.level = level;
+        if (this.level == _maxLevel)
+        {
+            acquired = true;
+
+            return;
+        }
+
+        IncreaseLevel();
+    }
+
     public void AcquireLevel()
     {
         if (acquired)

@@ -1,13 +1,12 @@
-﻿public class LevelData
-{
-    public string levelName { private set; get; }
-    public bool locked { private set; get; }
-    public bool timeAchievementObtained { private set; get; }
-    public bool resourcesAchievementObtained { private set; get; }
+﻿using UnityEditor;
 
-    public LevelData(string levelName)
+public class LevelData
+{
+    public bool timeAchievementObtained { set; get; }
+    public bool resourcesAchievementObtained { set; get; }
+
+    public LevelData()
     {
-        this.levelName = levelName;
+
     }
-    
 }

@@ -3,7 +3,7 @@ using UnityEngine.SceneManagement;
 
 public class LevelSelectController : MonoBehaviour
 {
-    static public LevelData selectedLevel;
+    static public string selectedLevelName;
 
     public void OnLevelButtonClicked()
     {
