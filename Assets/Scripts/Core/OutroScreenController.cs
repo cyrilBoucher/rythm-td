@@ -28,7 +28,7 @@ public class OutroScreenController : MonoBehaviour
 
     public void OnRestartButtonClicked()
     {
-        SceneManager.LoadSceneAsync("SampleScene");
+        SceneManager.LoadSceneAsync("Level");
     }
 
     public void OnShopButtonClicked()
